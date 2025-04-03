@@ -1,0 +1,422 @@
+body {
+    font-size: 0.875rem;
+}
+
+.feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    /* rtl:raw:
+  right: 0;
+  */
+    bottom: 0;
+    /* rtl:remove */
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 48px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        top: 5rem;
+    }
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+.sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #727272;
+}
+
+.sidebar .nav-link.active {
+    color: #6418c3;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+    color: inherit;
+}
+
+.sidebar-heading {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+    /*padding-top: .75rem;
+  padding-bottom: .75rem;*/
+    font-size: 1rem;
+}
+
+.navbar .navbar-toggler {
+    top: 0.25rem;
+    right: 1rem;
+}
+
+.navbar .form-control {
+    padding: 0.75rem 1rem;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.form-control-dark:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+/*********** Extra **************/
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+/********** Left Menu Toggle Css **************/
+.dropdown-toggle {
+    outline: 0;
+}
+
+.nav-flush .nav-link {
+    border-radius: 0;
+}
+
+.btn-toggle {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.65);
+    background-color: transparent;
+    border: 0;
+}
+.btn-toggle:hover,
+.btn-toggle:focus {
+    color: rgba(0, 0, 0, 0.85);
+    background-color: #d2f4ea;
+}
+
+/*
+.btn-toggle::before {
+  width: 1.25em;
+  line-height: 0;
+  content:"\f054";
+  transition: transform .35s ease;
+  transform-origin: .5em 50%;
+}
+
+
+.btn-toggle[aria-expanded="true"] {
+  color: rgba(0, 0, 0, .85);
+}
+.btn-toggle[aria-expanded="true"]:: before {
+  transform: rotate(90deg);
+}
+*/
+.btn-toggle span {
+    transition: all 0.5s;
+}
+
+.btn-toggle:hover span {
+    transform: translateX(10px);
+}
+
+.btn-toggle-nav li a span {
+    transition: all 0.5s;
+}
+
+.btn-toggle-nav li a:hover span {
+    transform: translateX(10px);
+}
+
+.btn-toggle .icon-before {
+    padding-left: 10px;
+}
+.btn-toggle .fa-chevron-right {
+    position: absolute;
+    right: 10px;
+    transition: transform 0.35s ease;
+}
+
+.btn-toggle[aria-expanded="true"] .fa-chevron-right {
+    transform: rotate(90deg);
+    transition: transform 0.35s ease;
+}
+
+.btn-toggle-nav a {
+    display: inline-flex;
+    padding: 0.1875rem 0.5rem;
+    margin-top: 0.125rem;
+    margin-left: 1.25rem;
+    text-decoration: none;
+}
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: #d2f4ea;
+}
+
+.scrollarea {
+    overflow-y: auto;
+}
+
+.fw-semibold {
+    font-weight: 600;
+}
+.lh-tight {
+    line-height: 1.25;
+}
+
+/**********scrollbar styles  **************/
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #e4f7ff;
+    -webkit-box-shadow: inset 0 0 6px #f1f1f1;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #999999;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+/*****************************/
+
+.buttton {
+    border: 1px solid #eb8153;
+    display: inline-block;
+    color: #eb8153;
+    padding: 10px 20px 10px 20px !important;
+    font-weight: normal;
+    border-radius: 3px;
+    text-decoration: none;
+}
+.buttton:hover {
+    background: #eb8153;
+    color: #fff;
+}
+.buttton i {
+    margin-right: 3px;
+    margin-left: 3px;
+}
+.buttton_1 {
+    background: #6418c3;
+    border: 1px solid #6418c3;
+    color: #fff;
+    display: inline-block;
+    padding: 10px 20px 10px 20px !important;
+    font-weight: normal;
+    border-radius: 3px;
+}
+.buttton_1:hover {
+    background: #fff;
+    color: #6418c3;
+    border: 1px solid #6418c3;
+}
+.buttton_1 i {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+/* Global styling for placeholder text */
+::placeholder {
+    color: #999999 !important; /* Light gray */
+}
+
+/* Optional: Placeholder styling when focused */
+:focus::placeholder {
+    color: #cccccc; /* Slightly lighter gray */
+}
+
+.table-dark {
+    --bs-table-bg: #04284c;
+}
+/* Navbar Customizations */
+.navbar {
+    padding: 0 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #04284c;
+    /* Dark gray for a modern look */
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #f8f9fa !important;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand i {
+    margin-right: 8px;
+    color: #ffc107;
+    /* Gold accent for the brand icon */
+}
+
+.navbar-nav .nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #adb5bd !important;
+    /* Soft gray */
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #f8f9fa !important;
+}
+
+.navbar-nav .nav-item .active {
+    color: #ffc107 !important;
+    /* Highlight active link */
+    font-weight: 600;
+}
+
+/* Center Links */
+.navbar-center {
+    flex-grow: 1;
+    justify-content: center;
+}
+
+/* Profile Dropdown */
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffc107;
+    /* Accent border for profile */
+}
+
+.dropdown-menu {
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-item {
+    font-size: 0.95rem;
+    color: #212529;
+    transition: background 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+/* Responsive Toggle */
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.widget-icon {
+    font-size: 2.5rem;
+    color: #ffc107;
+    flex-shrink: 0;
+}
+.widget {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+.widget-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.widget-number {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
+/* Chart Container */
+.chart-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.product-image {
+    width: 100px;
+    /* Set width of the image */
+    height: 100px;
+    /* Set height of the image */
+    object-fit: cover;
+    /* Ensures the image maintains its aspect ratio while filling the box */
+    border-radius: 10px;
+    /* Rounded corners for the image */
+    border: 2px solid #ccc;
+    /* Border around the image */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Transition for hover effect */
+}
+
+/* Optional: Add hover effect for the image */
+.product-image:hover {
+    transform: scale(1.1);
+    /* Slight zoom effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow effect on hover */
+}
