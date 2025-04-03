@@ -1,0 +1,36 @@
+name: Laravel CI
+
+on:
+  push:
+    branches:
+      - main  # Runs when pushing to main branch
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set Up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2  # Change to your PHP version
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Set Up Environment
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Run Migrations
+        run: php artisan migrate --force
+
+      - name: Run Tests
+        run: php artisan test
