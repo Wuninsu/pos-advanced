@@ -101,7 +101,7 @@
                                                     <span wire:ignore><i data-feather="edit" class="icon-xs"></i></span>
                                                     Edit
                                                 </a>
-                                                <button type="button" wire:click="confirmDelete('{{ $product->id }}')"
+                                                <button type="button" wire:click="confirmDelete('{{ $product->uuid }}')"
                                                     class="btn btn-sm btn-danger">
                                                     <span wire:ignore><i data-feather="trash-2" class="icon-xs"></i></span>
                                                     Delete

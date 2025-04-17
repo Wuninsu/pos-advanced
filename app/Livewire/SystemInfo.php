@@ -345,6 +345,7 @@ class SystemInfo extends Component
             // Step 4: Upload to Google Drive
             $this->uploadToGoogleDrive('storage/' . $uploadedPath);
             $this->loadBackups();
+            toastr('Backup created and successfully uploaded to developers server!', 'success');
             $this->dispatch('backup-status', data: [
                 'type' => 'success',
                 'message' => '✅ Backup created and successfully uploaded to developers server!',
@@ -393,13 +394,29 @@ class SystemInfo extends Component
         return Storage::download($filename);
     }
 
-    public function delete($filename)
+
+
+    public $showDelete = false;
+    public $fileName;
+
+    public function handleDelete()
     {
-        Storage::delete($filename);
-        $this->loadBackups(); // Refresh list
-        session()->flash('message', 'Backup deleted successfully.');
+        if ($this->fileName) {
+            Storage::delete($this->fileName);
+            $this->loadBackups(); // Refresh list
+            $this->showDelete = false;
+            $this->fileName = null;
+            toastr('Backup deleted successfully', 'success');
+        } else {
+            toastr('Backup not deleted', 'error');
+        }
     }
 
+    public function confirmDelete($file)
+    {
+        $this->fileName = $file;
+        $this->showDelete = true;
+    }
 
     function uploadToGoogleDrive($pathToFile)
     {
@@ -495,9 +512,9 @@ class SystemInfo extends Component
             // Send OTP
             $response = sendSMS($data);
             if (!$response) {
-                $this->errorMessage = 'Failed to send update request.';
+                toastr('Failed to send update request.', 'error');
             } else {
-                $this->successMessage = 'Update request sent successfully!';
+                toastr('Update request sent successfully.', 'success');
             }
         } catch (\Exception $e) {
             $this->errorMessage = 'Error sending SMS: ' . $e->getMessage();

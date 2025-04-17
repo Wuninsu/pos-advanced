@@ -38,7 +38,7 @@
                     <div class="card-header ">
                         <div class="d-flex justify-content-between  align-items-center">
                             <div>
-                                <h4 class="mb-0">Overview</h4>
+                                <h4 class="mb-0">System Overview</h4>
                             </div>
                         </div>
 
@@ -189,20 +189,6 @@
                                 class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true">
                             </span>
                         </button>
-
-
-                        <!-- Display success or error messages -->
-                        @if ($successMessage)
-                            <div class="alert alert-success mt-2">
-                                {{ $successMessage }}
-                            </div>
-                        @endif
-
-                        @if ($errorMessage)
-                            <div class="alert alert-danger mt-2">
-                                {{ $errorMessage }}
-                            </div>
-                        @endif
                     </div>
                 @endif
 
@@ -238,21 +224,19 @@
                     <div class="card mb-4">
                         <div class="card-header  ">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" wire:model.live.debounce.500ms="search"
-                                        class="form-control" placeholder="Search invoice number...">
 
-                                </div>
-                                <div class="col-lg-5 text-lg-end mt-3 mt-lg-0">
-                                    <button type="button" wire:click="backupAndUploadSQLite"
-                                        class="btn btn-primary me-2" wire:loading.attr="disabled">
+
+                                <div class="col-md-6 mt-3 mt-lg-0">
+                                    <button wire:click="backupAndUploadSQLite" wire:loading.attr="disabled"
+                                        wire:target="backupAndUploadSQLite" class="btn btn-primary position-relative">
+
                                         <span wire:loading.remove wire:target="backupAndUploadSQLite">
                                             + Create New Backup
                                         </span>
-                                        <span wire:loading wire:target="backupAndUploadSQLite">
-                                            <span class="spinner-border spinner-border-sm me-1" role="status"
-                                                aria-hidden="true"></span>
-                                            Creating...
+                                        <!-- Loader Spinner -->
+                                        <span wire:loading wire:target="backupAndUploadSQLite"
+                                            class="spinner-border spinner-border-sm text-light" role="status"
+                                            aria-hidden="true">
                                         </span>
                                     </button>
                                 </div>
@@ -274,11 +258,16 @@
                                                 <td>
                                                     <button wire:click="download('{{ $file }}')"
                                                         class="btn btn-primary btn-sm">
+                                                        <span wire:ignore><i data-feather="download"
+                                                                class="icon-xs"></i></span>
                                                         Download
                                                     </button>
-                                                    <button wire:click="delete('{{ $file }}')"
-                                                        class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('Are you sure you want to delete this backup?')">
+
+                                                    <button type="button"
+                                                        wire:click="confirmDelete('{{ $file }}')"
+                                                        class="btn btn-sm btn-danger">
+                                                        <span wire:ignore><i data-feather="trash-2"
+                                                                class="icon-xs"></i></span>
                                                         Delete
                                                     </button>
                                                 </td>
@@ -340,30 +329,23 @@
         </div>
     </div>
 
-
-    {{-- <div>
-        <h2>Files from Google Drive</h2>
-
-        @if (is_array($files) && count($files) > 0)
-            <ul>
-                @foreach ($files as $file)
-                    <li>
-                        <strong>{{ $file['name'] }}</strong>
-                        - <a href="{{ route('downloadFile', $file['id']) }}">Download</a>
-                    </li>
-                @endforeach
-            </ul>
-        @else
-            <p>No files found in Google Drive.</p>
-        @endif
-    </div> --}}
-
+    <div id="deleteModal" class="backdrop @if ($showDelete) active @endif">
+        <div class="confirmDelete">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <div class="confirmDelete-title">Delete Confirmation</div>
+            <div class="confirmDelete-content" id="deleteMessage">Are you sure you want to delete this backup?</div>
+            <div class="confirmDelete-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger btn-sm" wire:click="handleDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
 
     @script
         <script>
             $wire.on('backup-status', (event) => {
                 let myData = event.data;
-                alert(myData.message)
+
                 // Auto-hide after 4 seconds
                 setTimeout(() => {
                     alertBox.classList.add('d-none');
