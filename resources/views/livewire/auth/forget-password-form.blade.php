@@ -1,12 +1,11 @@
 <div>
     <form wire:submit.prevent="verify">
-        <p class="mb-2 text-center">Don't worry, we'll send you an email to reset your password.</p>
-        <!-- Email -->
+        <p class="mb-2 text-center">Don't worry, we'll send you an OTP to reset your password.</p>
         <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" class="form-control @error('email') border-danger is-invalid @enderror"
-                wire:model="email" placeholder="Enter Your Email" />
-            @error('email')
+            <label for="email" class="form-label">Enter Phone</label>
+            <input type="text" id="email" class="form-control @error('phone') border-danger is-invalid @enderror"
+                wire:model="phone" placeholder="Enter Your Phone number" />
+            @error('phone')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>

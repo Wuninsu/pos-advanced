@@ -33,12 +33,13 @@ class Pos extends Component
     public $categories = [];
     public $selectedCategory = null; // For category filtering
 
-    public $customerName = '';
+    public $customerName;
     public $newCustomer = false;
     public $showPaymentModal = false;
 
 
-    public $phone, $email, $name, $address, $customer_id;
+    public $phone, $email, $address, $customer_id;
+    public $name = 'Walk-in Customer';
 
     #[Validate('required')]
     #[Validate('regex:/^\d{10,13}$/')]
@@ -392,6 +393,7 @@ class Pos extends Component
                 $this->customer = $customer;
             } else {
                 $this->phone = $this->customerPhone;
+                $this->name = "Walk-in Customer";
                 $this->newCustomer = true;
             }
         }

@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="col-lg-6 col-md-6">
-                           
+
                             <div class="search-container">
                                 <input type="text" wire:model.live.debounce.500ms="search"
                                     class="form-control rounded-3" id="searchInput" placeholder="Start Typing...">
@@ -72,7 +72,7 @@
                                             <th scope="col">Unit Price({!! $settings['currency'] ?? 'N/A' !!})</th>
                                             <th scope="col">Amount({!! $settings['currency'] ?? 'N/A' !!})</th>
                                             <th scope="col">Action <button class="btn btn-danger btn-sm"
-                                                    wire:click="cancelOrder">Cancel Order</button></th>
+                                                    wire:click="cancelOrder">Cancel Invoice</button></th>
                                         </tr>
                                     </thead>
                                     <tbody>

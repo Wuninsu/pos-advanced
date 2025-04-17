@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -96,8 +97,8 @@ class UserForm extends Component
 
     public function saveUser()
     {
-        $this->validate();
 
+        $this->validate();
 
         $user = User::find($this->user_id);
         $filePath = $user ? $user->avatar : null;

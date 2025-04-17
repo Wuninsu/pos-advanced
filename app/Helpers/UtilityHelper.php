@@ -1,13 +1,14 @@
 <?php
 
 use App\Models\OrdersModel;
-use App\Models\Settings;
+use App\Models\ProductsModel;
 use App\Models\settingsModel;
 use App\Models\SettingsModel as ModelsSettingsModel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 
 if (!function_exists('uploadFile')) {
     /**
@@ -36,6 +37,7 @@ if (!function_exists('uploadFile')) {
         return $path;
     }
 }
+
 
 if (!function_exists('paginationLimit')) {
     function paginationLimit()
@@ -134,10 +136,6 @@ if (!function_exists('generateInvoiceNumber')) {
 }
 
 
-
-
-
-
 if (!function_exists('companyData')) {
     function companyData()
     {
@@ -152,7 +150,7 @@ if (!function_exists('allTimePayments')) {
         $results = OrdersModel::select('transactions')
             ->where('status', 'completed')
             ->sum('order_amount');
-        return intWithStyle($results);
+        return intWithStyle(number_format($results, 2, '.', ''));
     }
 }
 if (!function_exists('ordersThisYear')) {
@@ -302,5 +300,77 @@ if (!function_exists('getOrdersChartData')) {
                 'percentage' => $percentPending,
             ],
         ];
+    }
+}
+
+
+if (!function_exists('sendSMS')) {
+    /**
+     * Summary of sendSMS
+     * @param array $data
+     * @return bool
+     */
+    function sendSMS($data): bool
+    {
+        // Define parameters
+        $api_key = "THNhUHBkSmtqdFlIYnlCVE52ZHg";
+        $from = "EchoEdgePOS";
+        $to = $data['phone']; // Recipient's phone number
+        $msg = urlencode($data['message']); // Encode the message
+
+        // Initialize cURL request
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://sms.arkesel.com/sms/api?action=send-sms&api_key=$api_key&to=$to&from=$from&sms=$msg",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+
+        // Execute cURL request
+        $response = curl_exec($curl);
+        if (curl_errno($curl)) {
+            // Handle cURL error
+            $error_msg = curl_error($curl);
+            curl_close($curl);
+            // Log or handle the error message
+            return false;
+        }
+        curl_close($curl);
+
+        // Handle the API response
+        if ($response) {
+            $result = trim($response, '[]');
+            $sms_res = json_decode($result);
+
+            if ($sms_res && isset($sms_res->code) && $sms_res->code == 'ok') {
+                return true; // SMS sent successfully
+            }
+        }
+
+        // Default failure case
+        return false;
+    }
+}
+
+if (!function_exists('getLowStockProducts')) {
+    function getLowStockProducts($threshold = 100)
+    {
+        $settings = ModelsSettingsModel::getSettingsData();
+        $lowStock = $settings['low_stock'] ?? 100;
+        return $products = ProductsModel::where('stock', '>', 0)
+            ->where('stock', '<=', $lowStock)
+            ->get();
+    }
+}
+
+if (!function_exists(' getOutOfStockProducts')) {
+    function getOutOfStockProducts()
+    {
+        return ProductsModel::where('stock', '=', 0)->get();
     }
 }

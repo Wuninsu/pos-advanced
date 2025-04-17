@@ -333,7 +333,6 @@
                     {{-- @dd(request()->segment(2)) --}}
                     {{ $slot }}
 
-
                     <script>
                         function showActionNotification(title, content) {
                             const container = document.getElementById('notificationContainer');
@@ -379,9 +378,48 @@
                         </div>
                     </div>
 
+                    @if (getLowStockProducts()->isNotEmpty())
+                        <!-- Modal -->
+                        <div class="modal fade" id="lowStockModal" tabindex="-1" aria-labelledby="lowStockModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered  modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">⚠️ Low Stock Products</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul class="list-group">
+                                            @foreach (getLowStockProducts() as $product)
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{ $product->name }}
+                                                    <span>
+                                                        <span
+                                                            class="badge bg-danger rounded-pill">{{ $product->stock }}
+                                                            left</span>
+
+                                                        <a class="badge bg-primary rounded-pill"
+                                                            href="{{ route('products.edit', ['product' => $product->uuid]) }}">Restock</a>
+                                                    </span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>
+        <audio id="alertSound" src="{{ asset('storage/audio/smooth-simple-notification.mp3') }}"
+            preload="auto"></audio>
+
     </main>
 
     <!-- Scripts -->
@@ -412,10 +450,138 @@
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
     <script>
+        // document.cookie = "hide_for_today=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
         function closeModal() {
             document.getElementById('deleteModal').classList.remove('active');
         }
+
+        document.getElementById('lowStockModal').addEventListener('hidden.bs.modal', function() {
+            // Set the cookie to hide the modal for the rest of the day (expires in 24 hours)
+            document.cookie = "hide_for_today=true; path=/; expires=" + new Date(new Date().setHours(23, 59, 59,
+                999)).toUTCString();
+        });
     </script>
+
+    @if (getLowStockProducts()->isNotEmpty())
+        <script>
+            // Function to get the value of a cookie by name
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+
+            // Check if the 'hide_for_today' cookie is set
+            document.addEventListener('DOMContentLoaded', () => {
+                const hideForToday = getCookie('hide_for_today');
+
+                // If cookie is not set, show the modal
+                if (!hideForToday) {
+                    const alertSound = document.getElementById('alertSound');
+                    alertSound.play();
+                    const modal = new bootstrap.Modal(document.getElementById('lowStockModal'));
+                    modal.show();
+                }
+            });
+        </script>
+    @endif
+
+    @php
+        $lowStockProducts = getLowStockProducts();
+        $outOfStockProducts = getOutOfStockProducts();
+    @endphp
+    {{-- <script>
+        const notifications = [];
+
+
+        @foreach ($lowStockProducts as $product)
+            notifications.push({
+                title: 'Low Stock Alert',
+                message: '{{ $product->name }} has only {{ $product->stock }} left!',
+                type: 'stock'
+            });
+        @endforeach
+
+        @foreach ($outOfStockProducts as $product)
+            notifications.push({
+                title: 'Out of Stock!',
+                message: '{{ $product->name }} is completely out of stock.',
+                type: 'danger'
+            });
+        @endforeach
+
+        const notificationList = document.getElementById('notificationList');
+        const notificationCount = document.getElementById('notificationCount');
+
+        function renderNotifications() {
+            notificationList.innerHTML = ''; // Clear list
+            notifications.forEach(notif => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item bg-light';
+                li.innerHTML = `
+                <a href="#!" class="text-muted">
+                    <h5 class="mb-1">${notif.title}</h5>
+                    <p class="mb-0">${notif.message}</p>
+                </a>
+            `;
+                notificationList.appendChild(li);
+            });
+            // Update badge count
+            notificationCount.textContent = notifications.length;
+        }
+
+        renderNotifications();
+    </script> --}}
+
+    <script>
+        const notifications = [];
+
+        @if ($lowStockProducts->count() > 0)
+            notifications.push({
+                title: 'Low Stock Alert',
+                message: '{{ $lowStockProducts->count() }} product(s) are low in stock.',
+                type: 'warning',
+                link: '{{ route('products.stock-levels', ['type' => 'low_stock']) }}'
+            });
+        @endif
+
+        @if ($outOfStockProducts->count() > 0)
+            notifications.push({
+                title: 'Out of Stock Alert',
+                message: '{{ $outOfStockProducts->count() }} product(s) are out of stock.',
+                type: 'danger',
+                link: '{{ route('products.stock-levels', ['type' => 'out_of_stock']) }}'
+            });
+        @endif
+
+        const notificationList = document.getElementById('notificationList');
+        const notificationCount = document.getElementById('notificationCount');
+
+        function renderNotifications() {
+            notificationList.innerHTML = '';
+
+            notifications.forEach(notif => {
+                const li = document.createElement('li');
+                li.className = `list-group-item bg-${notif.type}`;
+                li.innerHTML = `
+                <a href="${notif.link}" class="${notif.type === 'danger' ? 'text-white' : 'text-dark'} d-block">
+                    <h5 class="mb-1">${notif.title}</h5>
+                    <p class="mb-0">${notif.message}</p>
+                    <small class="text-decoration-underline">View Details</small>
+                </a>
+            `;
+                notificationList.appendChild(li);
+            });
+
+            notificationCount.textContent = notifications.length;
+        }
+
+        renderNotifications();
+    </script>
+
+
 
 
     {{-- <script>
@@ -438,6 +604,22 @@
             });
         });
     </script> --}}
+
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+            cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+            encrypted: true,
+        });
+
+        var channel = pusher.subscribe('notifications');
+        channel.bind('StockAlertEvent', function(data) {
+            alert('Hello Tamale Ghana');
+        });
+    </script>
 </body>
 
 </html>

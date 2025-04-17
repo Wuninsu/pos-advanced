@@ -175,7 +175,7 @@
                     <div class="mt-3">
 
                         <div class="btn-group d-flex mb-2" role="group" aria-label="Justified button group">
-                            <button wire:ignore type="button" onclick="printReceipt('thermal-receipt');"
+                            <button wire:ignore type="button" onclick="printReceipt('page');"
                                 class="btn btn-dark w-50">
                                 <i data-feather="printer"></i> Print
                             </button>
@@ -202,7 +202,7 @@
 
         @include('livewire.orderModal')
 
-        <audio id="addToCartSound" src="{{ asset('storage/audio/success_sound.wav') }}" preload="auto"></audio>
+        <audio id="addToCartSound" src="{{ asset('storage/audio/success_sound.mp3') }}" preload="auto"></audio>
 
         <script src="https://js.paystack.co/v1/inline.js"></script>
         @script

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Events\NotificationAlert;
 use App\Models\CategoriesModel;
 use App\Models\CustomersModel;
 use App\Models\OrdersModel;
@@ -15,13 +16,14 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
+    public function mount() {}
 
     public function getProductStockInfo()
     {
         $totalProducts = ProductsModel::count();
 
         $lowStock = lowStock();
-        $lowStockCount = ProductsModel::where('stock', '>', 1)->where('stock', '<=', $lowStock)->count();
+        $lowStockCount = ProductsModel::where('stock', '>', 0)->where('stock', '<=', $lowStock)->count();
         $goodStockCount = ProductsModel::where('stock', '>', $lowStock)->count();
         $outOfStockCount = ProductsModel::where('stock', '<', 1)->count();
 
@@ -74,15 +76,16 @@ class Dashboard extends Component
 
     public function getTopProductsSuppliers()
     {
-        // Get the total number of products
         $totalProducts = DB::table('products')->count();
 
-        // Fetch top 10 suppliers with product count and percentage
+        if ($totalProducts === 0) {
+            return collect();
+        }
+
         $topProducts = DB::table('products')
             ->select(
                 'suppliers.company_name',
-                DB::raw('COUNT(products.supplier_id) as total_products'),
-                DB::raw('ROUND((COUNT(products.supplier_id) / ' . $totalProducts . ') * 100, 2) as percentage')
+                DB::raw('COUNT(products.id) as total_products')
             )
             ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
             ->groupBy('products.supplier_id', 'suppliers.company_name')
@@ -90,7 +93,11 @@ class Dashboard extends Component
             ->limit(10)
             ->get();
 
-        return $topProducts;
+        // Add percentage in PHP
+        return $topProducts->map(function ($item) use ($totalProducts) {
+            $item->percentage = round(($item->total_products / $totalProducts) * 100, 2);
+            return $item;
+        });
     }
 
 
@@ -98,7 +105,6 @@ class Dashboard extends Component
     #[Title('Dashboard')]
     public function render()
     {
-
         return view('livewire.admin.dashboard', [
             'productsStock' => $this->getProductStockInfo(),
             'dashboardStats' => $this->getDashboardStats(),

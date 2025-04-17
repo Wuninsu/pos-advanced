@@ -60,7 +60,6 @@
     </div>
 
 
-    <!-- javascript behaviour -->
 
     <div class="tab-content p-4" id="myTabContent">
         <div class="tab-pane fade {{ $currentTab === 'overview' ? 'active show' : '' }} " id="overview"
@@ -427,7 +426,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ date('jS M Y', strtotime($order->created_at)) }}</td>
-                                                <td wire:ignore>
+                                                <td>
 
                                                     <a href="{{ route('orders.details', ['order' => $order->order_number]) }}"
                                                         class="btn btn-primary btn-sm"><i data-feather="eye"

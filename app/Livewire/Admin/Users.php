@@ -2,8 +2,11 @@
 
 namespace App\Livewire\Admin;
 
+use App\Events\StockAlertEvent;
 use App\Exports\ExportUsers;
+use App\Models\ForgotPassword;
 use App\Models\User as ModelsUser;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
@@ -24,8 +27,14 @@ class Users extends Component
 
     public function confirmDelete($uuid)
     {
-        $this->user_uuid = $uuid;
-        $this->showDelete = true;
+        event(new StockAlertEvent([
+            'title' => 'Stock Alert:  Product A',
+            'message' => 'Only 3 items left in stock!',
+            'type' => 'stock'
+        ]));
+
+        // $this->user_uuid = $uuid;
+        // $this->showDelete = true;
     }
 
     public function handleDelete()
@@ -61,6 +70,14 @@ class Users extends Component
     #[Title('Users')]
     public function render()
     {
+        // if (ForgotPassword::count() > 0) {
+        //     ForgotPassword::truncate();
+        // }
+
+       
+
+        // Cache::put("user_phone", auth('web')->user()->phone, now()->addMinutes(2));
+
         $users = ModelsUser::query()
             ->when($this->search, function ($query) {
                 $query->where('username', 'like', '%' . $this->search . '%')

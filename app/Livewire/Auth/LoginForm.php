@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Auth;
 
 use App\Helpers\ActivityLogger;
 use App\Models\User;
@@ -86,6 +86,6 @@ class LoginForm extends Component
     #[Title('Login')]
     public function render()
     {
-        return view('livewire.login-form', ['page_title' => "Login"])->layout('layouts.auth');
+        return view('livewire.auth.login-form', ['page_title' => "Login"])->layout('layouts.auth');
     }
 }

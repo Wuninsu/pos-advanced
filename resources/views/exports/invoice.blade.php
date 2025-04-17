@@ -132,9 +132,8 @@
 
                         <tr>
                             <td rowspan="3" colspan="3">
-                                <strong><small>amount payable in words</small></strong><br>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, delectus voluptatem.
-                                Sint ex, rem consectetur praesentium maiores possimus impedit obcaecati dolores.
+                                <strong><small>Amount payable in words:</small></strong><br>
+                            {{$detail->amount_in_words ?? ''}}
                             </td>
                             <td colspan="4">
                                 <table class="w-full border-collapse border-spacing-0">

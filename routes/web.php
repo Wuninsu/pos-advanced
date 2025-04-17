@@ -1,16 +1,7 @@
 <?php
 
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\CompaniesController;
-use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\InvoiceGenerator;
-use App\Http\Controllers\OrderDetailsController;
 use App\Http\Controllers\OrdersController;
-use App\Http\Controllers\PosController;
-use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\SuppliersController;
-use App\Http\Controllers\TransactionsController;
-use App\Http\Controllers\UserController;
 use App\Livewire\Admin\Categories;
 use App\Livewire\Forms\CustomerForm;
 use App\Livewire\Admin\Customers as AdminCustomers;
@@ -26,35 +17,29 @@ use App\Livewire\Admin\Suppliers;
 use App\Livewire\Admin\Transactions;
 use App\Livewire\Forms\UserForm;
 use App\Livewire\Admin\Users;
-use App\Livewire\ForgetPasswordForm;
 use App\Livewire\Forms\CategoryInfo;
 use App\Livewire\Forms\InvoiceForm;
 use App\Livewire\Forms\OrderForm;
 use App\Livewire\Forms\ProfileForm;
 use App\Livewire\Forms\SupplierInfo;
-use App\Livewire\LoginForm;
 use App\Livewire\OrderDetails;
-use App\Livewire\ResetForm;
 use App\Livewire\Settings;
+use App\Livewire\SystemInfo;
 use App\Livewire\ViewInvoice;
-use App\Models\Customers;
 use Illuminate\Support\Facades\Route;
+use Google\Client;
+use Illuminate\Support\Facades\Storage;
+use Google\Service\Drive;
 
 Route::middleware('guest')->group(function () {
-    // Route::get('/', Dashboard::class)->name('admin.dashboard');
-    // Route::controller(App\Http\Controllers\AuthController::class)->group(function () {
-    //     Route::get('login', 'login')->name('login');
-    //     Route::post('auth/login', 'authLogin')->name('auth.login');
-    //     Route::get('register', 'register')->name('register');
-    //     Route::post('account/register', 'accountSignup')->name('account.signup');
-    //     Route::get('forgot-password', 'forgotPassword')->name('forgot.password');
-    //     Route::post('reset-password', 'reset')->name('reset');
-    // });
+    Route::get('login', App\Livewire\Auth\LoginForm::class)->name('login');
+    Route::get('forgot-password', App\Livewire\Auth\ForgetPasswordForm::class)->name('forget-password');
+    Route::get('reset-password/{token}', App\Livewire\Auth\ResetForm::class)->name('reset-password');
 
-    Route::get('login', LoginForm::class)->name('login');
-    Route::get('forgot-password', ForgetPasswordForm::class)->name('forget-password');
-    Route::get('reset-password/{token}', ResetForm::class)->name('reset-password');
+    Route::get('/verify-otp', App\Livewire\Auth\VerifyOTP::class)->name('otp.verify');
 });
+
+
 
 
 
@@ -68,7 +53,73 @@ Route::middleware(['auth', 'isOnline', 'checkRole:admin,manager'])->group(functi
     Route::get('/users/edit/{user}', UserForm::class)->name('users.edit');
 
     Route::get('/settings/config', Settings::class)->name('settings');
+    Route::get('/settings/system-info', SystemInfo::class)->name('settings.sys-info');
+
+    Route::get('/google-auth', function () {
+        $client = new Client();
+        $client->setAuthConfig(storage_path('app/google/credentials.json'));
+        $client->setAccessType('offline');
+        $client->setPrompt('select_account consent');
+        $client->addScope('https://www.googleapis.com/auth/drive.file');
+
+        if (!request()->has('code')) {
+            // Step 1: Redirect to Google
+            $authUrl = $client->createAuthUrl();
+            return redirect()->away($authUrl);
+        }
+
+        // Step 2: Callback from Google
+        $accessToken = $client->fetchAccessTokenWithAuthCode(request('code'));
+
+        if (isset($accessToken['error'])) {
+            return redirect()->route('dashboard')->with('errorMsg', 'Google Drive authorization failed: ' . $accessToken['error_description']);
+        }
+
+        Storage::put('google/token.json', json_encode($accessToken));
+        return redirect()->route('dashboard')->with('successMsg', 'Google Drive authorized successfully!');
+    });
+
+    Route::get('download-file/{fileId}', function ($fileId) {
+        $filePath = downloadFileFromGoogleDrive($fileId);
+
+        if ($filePath) {
+            return response()->download($filePath);
+        }
+
+        return 'Failed to download file.';
+    })->name('downloadFile');
 });
+
+// function downloadFileFromGoogleDrive($fileId)
+// {
+//     $client = new Client();
+//     $client->setAuthConfig(public_path('storage/google/credentials.json'));
+//     $client->addScope(Drive::DRIVE_READONLY);
+
+//     $tokenPath = public_path('storage/google/token.json');
+//     $accessToken = json_decode(file_get_contents($tokenPath), true);
+//     $client->setAccessToken($accessToken);
+
+//     // Check if the token is expired
+//     if ($client->isAccessTokenExpired()) {
+//         return 'Token expired. Reauthorize.';
+//     }
+
+//     $service = new Drive($client);
+
+//     // Download the file
+//     $response = $service->files->get($fileId, [
+//         'alt' => 'media',
+//     ]);
+
+//     $content = $response->getBody()->getContents();
+
+//     // Save the file to the local server
+//     $filePath = public_path('storage/downloads/' . $fileId . '.zip');
+//     file_put_contents($filePath, $content);
+
+//     return $filePath; // Return the path where the file is saved locally
+// }
 // General route
 Route::middleware(['auth', 'isOnline', 'checkRole:admin,cashier,manager'])->group(function () {
 
@@ -120,6 +171,11 @@ Route::middleware(['auth', 'isOnline', 'checkRole:admin,cashier,manager'])->grou
     Route::get('/suppliers/supplier/{supplier}/products', SupplierInfo::class)->name('supplier.products.info');
 
     Route::get('/receipt/{orderId}', [OrdersController::class, 'generateReceipt'])->name('generateReceipt');
+
+
+
+    Route::get('/products/stock-level/{type}', App\Livewire\StockAlerts::class)->name('products.stock-levels');
+    // Route::get('/products/out-of-stock', StockAlerts::class)->name('products.outofstock');
 });
 
 // COMMON

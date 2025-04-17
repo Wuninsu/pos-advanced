@@ -21,7 +21,13 @@
         </div>
         <!-- Button -->
         <div class="mb-3 d-grid">
-            <button type="submit" class="btn btn-primary">Reset Password</button>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+                <span wire:loading.remove>Reset Password</span>
+                <span wire:loading>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Resetting password...
+                </span>
+            </button>
         </div>
         <span>
             Don't have an account?

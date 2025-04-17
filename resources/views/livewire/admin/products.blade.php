@@ -99,11 +99,13 @@
                                                 <a href="{{ route('products.edit', ['product' => $product->uuid]) }}"
                                                     class="btn btn-primary btn-sm">
                                                     <span wire:ignore><i data-feather="edit" class="icon-xs"></i></span>
-                                                    Edit</a>
+                                                    Edit
+                                                </a>
                                                 <button type="button" wire:click="confirmDelete('{{ $product->id }}')"
                                                     class="btn btn-sm btn-danger">
                                                     <span wire:ignore><i data-feather="trash-2" class="icon-xs"></i></span>
-                                                    Delete</button>
+                                                    Delete
+                                                </button>
                                             </td>
                                         </tr>
                                     @empty

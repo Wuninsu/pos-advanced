@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Auth;
 
 use App\Models\ForgotPassword;
 use App\Models\User;
@@ -15,10 +15,10 @@ class ResetForm extends Component
 
     public function mount(string $token)
     {
-        $find = DB::table('password_reset_tokens')->where("token", $token)->first();
+        $find = ForgotPassword::where("token", $token)->first();
 
         if (!$find) {
-            session()->flash('error', 'Invalid or expired token.');
+            session()->flash('errorMsg', 'Invalid OTP or expired token.');
             return redirect('/forgot-password'); // Redirect if token is invalid
         }
 
@@ -55,9 +55,9 @@ class ResetForm extends Component
     }
 
 
-    #[Title('Forgot Password')]
+    #[Title('Reset Password')]
     public function render()
     {
-        return view('livewire.reset-form')->layout('layouts.auth');
+        return view('livewire.auth.reset-form')->layout('layouts.auth');
     }
 }

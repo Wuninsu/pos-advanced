@@ -307,190 +307,196 @@
             </div>
         </div>
     </div>
-
-    <div class="row row-cols-lg-2 ">
-        <div class="col mb-5">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="mb-0"><i data-feather="award"></i> Top 10 Selling Products</h4>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive table-card ">
-                        <table class="table mb-0 text-nowrap table-centered">
-                            <thead class="table-light">
-                                <tr>
-
-                                    <th>Product Name</th>
-                                    <th>Sales Count</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($topProducts as $item)
+    @if (auth('web')->user()->role == 'admin')
+        <div class="row row-cols-lg-2 ">
+            <div class="col mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i data-feather="award"></i> Top 10 Selling Products</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive table-card ">
+                            <table class="table mb-0 text-nowrap table-centered">
+                                <thead class="table-light">
                                     <tr>
 
-                                        <td>
-                                            {{ $item->name }}
-                                        </td>
-                                        <td>
-                                            {{ $item->total_sold }}
-                                        </td>
+                                        <th>Product Name</th>
+                                        <th>Sales Count</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2" class="text-center"> <a href="{{ route('products') }}">View
-                                            All Products</a></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($topProducts as $item)
+                                        <tr>
 
-
-                    </div>
-                </div>
-
-            </div>
-
-
-        </div>
-        <div class="col mb-5">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Top 10 Suppliers</h4>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive table-card">
-                        <table class="table mb-0 text-nowrap table-centered">
-                            <thead class="table-light">
-                                <tr>
-
-                                    <th>Supplier Name</th>
-                                    <th>Products</th>
-                                    <th>Percentage</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($topSuppliers as $item)
+                                            <td>
+                                                {{ $item->name }}
+                                            </td>
+                                            <td>
+                                                {{ $item->total_sold }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot>
                                     <tr>
-
-                                        <td>
-                                            {{ $item->company_name }}
-                                        </td>
-                                        <td>
-                                            {{ $item->total_products }}
-                                        </td>
-                                        <td>{{ $item->percentage }}%</td>
+                                        <td colspan="2" class="text-center"> <a
+                                                href="{{ route('products') }}">View
+                                                All Products</a></td>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2" class="text-center"> <a href="{{ route('suppliers') }}">View
-                                            All Suppliers</a></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </tfoot>
+                            </table>
 
 
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-    <div class="row row-cols-xxl-3 row-cols-xl-2 row-cols-md-1  ">
-        <div class="col mb-5">
-            <div class="card h-100">
-                <div class="card-header">
-                    <h4 class="mb-0">Orders</h4>
-                </div>
-                <!-- card header -->
-                <div class="card-body p-0">
-
-                    <!-- table -->
-                    <table class="table mb-0">
-                        <tbody>
-                            <tr>
-                                <td class="border-top-0 ">Today's Orders Amount</td>
-                                <td>{{ ordersCountToday() }}</td>
-                                <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersToday() }}</td>
-                            </tr>
-                            <tr>
-                                <td class="border-top-0 ">This Week's Orders Amount</td>
-                                <td>{{ ordersCountThisWeek() }}</td>
-                                <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisWeek() }}</td>
-                            </tr>
-                            <tr>
-                                <td class="border-top-0 ">This Month's Orders Amount</td>
-                                <td>{{ ordersCountThisMonth() }}</td>
-                                <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisMonth() }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="border-top-0 ">This Year's Orders Amount</td>
-                                <td>{{ ordersCountThisYear() }}</td>
-                                <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisYear() }}</td>
-                            </tr>
-                            <tr>
-                                <td class="border-top-0 ">All Time Orders Amount</td>
-                                <td>{{ allTimeCount() }}</td>
-                                <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ allTimePayments() }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-        <div class="col mb-5">
-            <div class="card h-100">
-                <div class="card-header ">
-                    <div class="d-flex justify-content-between
-                    align-items-center">
-                        <div>
-                            <h4 class="mb-0">Orders Charts</h4>
                         </div>
-                        <div>
+                    </div>
 
-                            <div class="dropdown mb-3">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="chartDropdown"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Select Chart Type
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="chartDropdown">
-                                    <li><a class="dropdown-item" onclick="updateChartType('bar')">Bar
-                                            Chart</a></li>
-                                    <li><a class="dropdown-item" onclick="updateChartType('line')">Line Chart</a></li>
-                                    <li><a class="dropdown-item" onclick="updateChartType('pie')">Pie
-                                            Chart</a></li>
-                                    <li><a class="dropdown-item" onclick="updateChartType('doughnut')">Doughnut
-                                            Chart</a></li>
-                                    <li><a class="dropdown-item" onclick="updateChartType('polarArea')">Polar Area
-                                            Chart</a></li>
-                                </ul>
+                </div>
+
+
+            </div>
+            <div class="col mb-5">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Top 10 Suppliers</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive table-card">
+                            <table class="table mb-0 text-nowrap table-centered">
+                                <thead class="table-light">
+                                    <tr>
+
+                                        <th>Supplier Name</th>
+                                        <th>Products</th>
+                                        <th>Percentage</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($topSuppliers as $item)
+                                        <tr>
+
+                                            <td>
+                                                {{ $item->company_name }}
+                                            </td>
+                                            <td>
+                                                {{ $item->total_products }}
+                                            </td>
+                                            <td>{{ $item->percentage }}%</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="text-center"> <a
+                                                href="{{ route('suppliers') }}">View
+                                                All Suppliers</a></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row row-cols-xxl-3 row-cols-xl-2 row-cols-md-1  ">
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h4 class="mb-0">Orders</h4>
+                    </div>
+                    <!-- card header -->
+                    <div class="card-body p-0">
+
+                        <!-- table -->
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <td class="border-top-0 ">Today's Orders Amount</td>
+                                    <td>{{ ordersCountToday() }}</td>
+                                    <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersToday() }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border-top-0 ">This Week's Orders Amount</td>
+                                    <td>{{ ordersCountThisWeek() }}</td>
+                                    <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisWeek() }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border-top-0 ">This Month's Orders Amount</td>
+                                    <td>{{ ordersCountThisMonth() }}</td>
+                                    <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisMonth() }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border-top-0 ">This Year's Orders Amount</td>
+                                    <td>{{ ordersCountThisYear() }}</td>
+                                    <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisYear() }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border-top-0 ">All Time Orders Amount</td>
+                                    <td>{{ allTimeCount() }}</td>
+                                    <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ allTimePayments() }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <div class="card-header ">
+                        <div class="d-flex justify-content-between
+                    align-items-center">
+                            <div>
+                                <h4 class="mb-0">Orders Charts</h4>
+                            </div>
+                            <div>
+
+                                <div class="dropdown mb-3">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="chartDropdown"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Select Chart Type
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="chartDropdown">
+                                        <li><a class="dropdown-item" onclick="updateChartType('bar')">Bar
+                                                Chart</a></li>
+                                        <li><a class="dropdown-item" onclick="updateChartType('line')">Line Chart</a>
+                                        </li>
+                                        <li><a class="dropdown-item" onclick="updateChartType('pie')">Pie
+                                                Chart</a></li>
+                                        <li><a class="dropdown-item" onclick="updateChartType('doughnut')">Doughnut
+                                                Chart</a></li>
+                                        <li><a class="dropdown-item" onclick="updateChartType('polarArea')">Polar Area
+                                                Chart</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
 
+                    <div class="card-body p-0">
 
-                </div>
-
-                <div class="card-body p-0">
-
-                    <div class="py-3">
-                        <canvas id="orderChart"></canvas>
+                        <div class="py-3">
+                            <canvas id="orderChart"></canvas>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
 
-
+    @endif
     {{-- @script --}}
     <script>
         // document.addEventListener("DOMContentLoaded", function() {
@@ -578,4 +584,20 @@
         });
     </script>
     {{-- @endscript --}}
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {},
+            Tawk_LoadStart = new Date();
+        (function() {
+            var s1 = document.createElement("script"),
+                s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/67f3ba42910681190e7f12d7/1io80v5c3';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 </div>

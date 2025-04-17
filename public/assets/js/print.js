@@ -11,16 +11,94 @@ function printReceipt(elem) {
             <head>
                 <title>Receipt</title>
                 <style>
+                 @page {
+                size: 8.3in 11.7in;
+            }
+
+            @page {
+                size: A4;
+            }
+
+            .page {
+                page-break-after: always;
+                padding: 20px;
+            }
+
+            .table-bg {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 15px;
+                text-align: center;
+            }
+
+            .th {
+                border: 1px solid #000;
+                padding: 10px;
+            }
+
+            .td {
+                border: 1px solid #000;
+                padding: 3px;
+            }
+
+            .ass td {
+                border: 1px solid #000;
+                margin: 0px;
+            }
+
+
+            /* Container styling */
+            .assessment-guide {
+                width: 100%;
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .assessment-guide h3 {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+
+            /* Grid styling for two rows and three columns */
+            .grades-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                justify-items: center;
+                padding: 0 10px;
+            }
+
+            /* Styling for each grade card */
+            .grade-card {
+                border: 1px solid #000;
+                padding: 8px;
+                font-size: 14px;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            /* Range and details styling */
+            .grade-range {
+                font-weight: bold;
+            }
+
+            .grade-details {
+                font-style: italic;
+            }
+
+
+            @media print {
+                @page {
+                    margin: 0px;
+                    margin-left: 20px;
+                    margin-right: 20px;
+                }
+            }
                     /* Thermal Printer Optimized Receipt Styles */
             #thermal-receipt {
                 font-family: 'Courier New', Courier, monospace;
-                /* Best for thermal readability */
-                font-size: 12px;
-                width: 80mm;
-                /* Thermal printer width */
-                margin: 0 auto;
-                color: #000;
-                text-align: left;
+              
             }
 
             /* Header Section */
@@ -113,64 +191,10 @@ function printReceipt(elem) {
 
             /* Print-Specific Styles */
             @media print {
-                #thermal-receipt {
-                    width: 80mm;
-                    /* Fit thermal printer width */
-                    margin: 0;
-                    padding: 0;
-                }
-
-                @page {
-                    margin: 0;
-                }
+              
             }
 
-            @media print {
-                #printable {
-                    /* width: 100%; */
-                    width: 80mm;
-                    height: auto;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    text-align: center;
-                    margin: 0 auto;
-                }
-
-                body {
-                    margin: 0;
-                    padding: 0;
-                }
-
-                #printable * {
-                    page-break-inside: avoid;
-                }
-            }
-                /* Print-specific styles */
-                @media print {
-                    body {
-                        margin: 0;
-                        padding: 0;
-                    }
-                    #receipt {
-                        width: 80mm; /* Set fixed width for thermal print */
-                        margin: 0 auto;
-                        padding: 10mm;
-                        box-sizing: border-box;
-                    }
-                    /* Additional styles for fine-tuning thermal print */
-                    #receipt .logo img {
-                        width: 80mm; /* Ensure logo fits within thermal width */
-                        height: auto;
-                    }
-                    #receipt .table, #receipt td {
-                        border: none; /* Remove table borders for clean print */
-                    }
-                    #receipt .table td {
-                        padding: 5px;
-                        text-align: left;
-                    }
-                }
+      
             </style>
         </head>
         <body>

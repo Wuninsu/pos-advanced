@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\SettingsModel;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -45,6 +46,7 @@ class Settings extends Component
     }
 
 
+    #[Title('Configuration')]
     public function render()
     {
         return view('livewire.settings');

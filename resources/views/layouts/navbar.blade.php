@@ -63,10 +63,15 @@
 
                  </li>
                  <li class="dropdown stopevent ms-2">
-                     <a class="btn btn-ghost btn-icon rounded-circle" href="#!" role="button"
+                     <a class="btn btn-ghost btn-icon rounded-circle position-relative" href="#!" role="button"
                          id="dropdownNotification" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                          <i class="icon-xs" data-feather="bell"></i>
+                         <span class="position-absolute top-0 start-25 translate-middle badge rounded-pill bg-danger"
+                             id="notificationCount">
+                             0
+                         </span>
                      </a>
+
                      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end"
                          aria-labelledby="dropdownNotification">
                          <div>
@@ -80,8 +85,7 @@
                                  </a>
                              </div>
                              <div data-simplebar style="height: 250px">
-                                 <!-- List group -->
-                                 <ul class="list-group list-group-flush notification-list-scroll">
+                                 {{-- <ul class="list-group list-group-flush notification-list-scroll">
 
                                      <li class="list-group-item bg-light">
                                          <a href="#!" class="text-muted">
@@ -91,6 +95,9 @@
                                          </a>
                                      </li>
 
+                                 </ul> --}}
+                                 <ul class="list-group list-group-flush notification-list-scroll" id="notificationList">
+                                     <!-- Items will be injected here dynamically -->
                                  </ul>
                              </div>
                              <div class="border-top px-3 py-2 text-center">
@@ -99,6 +106,8 @@
                          </div>
                      </div>
                  </li>
+
+
                  <!-- List -->
                  <li class="dropdown ms-2">
                      <a class="rounded-circle" href="#!" role="button" id="dropdownUser" data-bs-toggle="dropdown"
