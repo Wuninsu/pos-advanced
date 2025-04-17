@@ -172,6 +172,12 @@
                     </div>
                 @endif
 
+                @if (session('release_notes'))
+                    <div class="alert alert-info">
+                        <strong>Release Notes for Version {{ $latestVersion }}:</strong>
+                        <p>{{ session('release_notes') }}</p>
+                    </div>
+                @endif
 
                 @if ($progress > 0)
                     <div class="mt-3">
@@ -196,8 +202,8 @@
                 @endif
             </div>
         </div>
-        <div class="tab-pane fade {{ $currentTab === 'backups' ? 'active show' : '' }}" id="backups" role="tabpanel"
-            aria-labelledby="profile-tab">
+        <div class="tab-pane fade {{ $currentTab === 'backups' ? 'active show' : '' }}" id="backups"
+            role="tabpanel" aria-labelledby="profile-tab">
 
             <div class="row">
                 <div class="col-12">
@@ -324,245 +330,6 @@
             <p>No files found in Google Drive.</p>
         @endif
     </div> --}}
-
-
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Print Order Receipt</title>
-        <style>
-            @page {
-                size: 8.3in 11.7in;
-            }
-
-            @page {
-                size: A4;
-            }
-
-            .page {
-                page-break-after: always;
-                padding: 20px;
-            }
-
-            .table-bg {
-                border-collapse: collapse;
-                width: 100%;
-                font-size: 15px;
-                text-align: center;
-            }
-
-            .th {
-                border: 1px solid #000;
-                padding: 10px;
-            }
-
-            .td {
-                border: 1px solid #000;
-                padding: 3px;
-            }
-
-            .ass td {
-                border: 1px solid #000;
-                margin: 0px;
-            }
-
-
-            /* Container styling */
-            .assessment-guide {
-                width: 100%;
-                text-align: center;
-                margin-top: 10px;
-            }
-
-            .assessment-guide h3 {
-                font-size: 18px;
-                margin-bottom: 10px;
-            }
-
-            /* Grid styling for two rows and three columns */
-            .grades-grid {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-                justify-items: center;
-                padding: 0 10px;
-            }
-
-            /* Styling for each grade card */
-            .grade-card {
-                border: 1px solid #000;
-                padding: 8px;
-                font-size: 14px;
-                width: 100%;
-                box-sizing: border-box;
-                text-align: center;
-            }
-
-            /* Range and details styling */
-            .grade-range {
-                font-weight: bold;
-            }
-
-            .grade-details {
-                font-style: italic;
-            }
-
-
-            @media print {
-                @page {
-                    margin: 0px;
-                    margin-left: 20px;
-                    margin-right: 20px;
-                }
-            }
-        </style>
-    </head>
-
-    <body>
-        <div id="page">
-            <table style="width: 100%;text-align:center">
-
-                @php
-                    $settings = App\Models\SettingsModel::getSettingsData();
-                @endphp
-
-                <tr>
-                    <td width="5%"></td>
-                    <td width="15%">
-                        <img style="width: 88px" src="{{ asset('storage/' . ($settings['logo'] ?? NO_IMAGE)) }}"
-                            alt="logo">
-                    </td>
-                    <td width="60%" style="text-transform:uppercase" align="left" valign="top">
-                        <h1 style="margin-bottom: 0px">
-                            <code>
-                                {{ !empty($settings['website_name']) ? $settings['website_name'] : 'business name goes here' }}
-                            </code>
-                        </h1>
-                        <code>{{ !empty($settings['motto']) ? $settings['motto'] : 'business motto goes here' }}</code>
-                    </td>
-                    <td width="15%" align="left">
-                        <code>
-                            <h3 style="margin-bottom: 0px">
-                                {{ !empty($settings['address']) ? $settings['address'] : 'address here' }}
-                            </h3>
-                            <h3 style="margin: 0px">
-                                {{ !empty($settings['email']) ? $settings['email'] : 'email' }}
-                            </h3>
-                            <h3 style="margin: 0px">
-                                {{ !empty($settings['phone']) ? $settings['phone'] : 'phone1' }}|{{ !empty($settings['phone2']) ? $settings['phone2'] : 'phone2' }}
-                                </h4>
-                        </code>
-                    </td>
-                    <td width="5%"></td>
-                </tr>
-
-            </table>
-
-            <table style="width: 100%">
-                <tr>
-                    <td width="5%"></td>
-                    <td width="70%">
-                        <table style="width: 100%; margin-bottom:3px">
-                            <tbody>
-                                <tr>
-                                    <td width="23%">Customer:</td>
-                                    <td style="border-bottom: 1px solid;width:100% ">Walk-in Customer
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <table style="width: 100%; margin-bottom:3px">
-                            <tbody>
-                                <tr>
-                                    <td width="23%">Phone Number:</td>
-                                    <td style="border-bottom: 1px solid;width:20% ">
-                                        0200041225
-                                    </td>
-                                    <td align="right" width="20%">Email:</td>
-                                    <td style="border-bottom: 1px solid;width:80% ">walkin@mail.com</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <table style="width: 100%; margin-bottom:3px">
-                            <tbody>
-                                <tr>
-                                    <td width="23%">Order Id:</td>
-                                    <td style="border-bottom: 1px solid;width:20% ">1001991</td>
-                                    <td align="right" width="20%">Order Date:</td>
-                                    <td style="border-bottom: 1px solid;width:80% ">16-04-2025</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td width="5%"></td>
-                </tr>
-            </table>
-
-            <br>
-            
-            <div>
-                <table class="table-bg">
-                    <thead>
-                        <tr>
-                            <td class="th" align="center" style="font-weight: bold;text-transform:uppercase"
-                                colspan="9"><code>Order Receipt</code></td>
-                        </tr>
-                        <tr>
-                            <th style="width: 10px" class="th" align="left">#</th>
-                            <th class="th">Product Name</th>
-                            <th style="width: 30px" class="th">Quantity</th>
-                            <th style="width: 150px" class="th">Unit Price({{ $settings['currency'] ?? 'GHS' }})
-                            </th>
-                            <th style="width: 200px" class="th">Amount({{ $settings['currency'] ?? 'GHS' }})</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="td" align="left">100</td>
-                            <td class="td" align="left">Product 1</td>
-                            <td class="td">200</td>
-                            <td class="td">20.50</td>
-                            <td class="td">41</td>
-                        </tr>
-
-
-                        <tr>
-                            <td class="th" align="left" colspan="4">Subtotal</td>
-                            <td class="td">44</td>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="th" align="left" colspan="4">Discount</td>
-
-                            <td colspan="2" class="td">
-                                0.00
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="th" align="left" colspan="4">Grand Total</td>
-                            <td class="td">{{ $settings['currency'] ?? 'GHS' }}44</td>
-                            </td>
-                        </tr>
-                        <tr></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <br>
-        </div>
-        <script>
-            // window.print();
-        </script>
-    </body>
-
-    </html>
 
 
     @script

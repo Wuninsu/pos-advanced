@@ -28,6 +28,7 @@ class SystemInfo extends Component
     public $currentVersion;
     public $latestVersion;
     public $updateAvailable = false;
+    public $releaseNotes;
     public int $progress = 0;
 
     public $updateUrl = 'https://drive.google.com/uc?export=download&id=1WguHAteSjuIIXvX-EArjwXdNV074sjw5';
@@ -47,155 +48,244 @@ class SystemInfo extends Component
         $this->currentTab = $tabId;
     }
 
+    // public function checkForUpdate()
+    // {
+    //     try {
+    //         $envVersion = env('APP_VERSION');
+
+    //         $url = 'https://raw.githubusercontent.com/Wuninsu/echo-pos-system/refs/heads/main/version.json';
+
+    //         $response = Http::withoutVerifying()->get($url);
+    //         if (!$response->successful()) {
+    //             return false;
+    //         }
+
+    //         $data = $response->json();
+
+    //         if (!isset($data['latest_version'])) {
+    //             return false;
+    //         }
+
+    //         $this->latestVersion = $data['latest_version'] ?? null;
+
+    //         if ($this->latestVersion &&  version_compare($data['latest_version'], $envVersion, '>')) {
+    //             $this->updateAvailable = true;
+    //             session()->flash('message', "Latest Version: $this->latestVersion");
+    //         } else {
+    //             $this->updateAvailable = false;
+    //             session()->flash('error', 'You are already using the latest version.');
+    //         }
+    //     } catch (\Exception $e) {
+    //         session()->flash('error', "Error fetching update: " . $e->getMessage());
+    //     }
+    // }
+
+
+
+
     public function checkForUpdate()
     {
-        $updateData = UpdateController::checkVersion();
-        dd($updateData);
-        if ($updateData && isset($updateData['latestVersion'])) {
-            $this->latestVersion = $updateData['latestVersion'];
-            // continue as normal
-        }
-        // try {
-        //     $response = Route::dispatch(Request::create('/api/latest-version', 'GET'));
-        //     $data = json_decode($response->getContent(), true); // Decode JSON string to array
-
-        //     $this->latestVersion = $data['latestVersion'] ?? null;
-
-        //     if ($this->latestVersion && version_compare($this->latestVersion, $this->currentVersion, '>')) {
-        //         $this->updateAvailable = true;
-        //         session()->flash('message', "Latest Version: $this->latestVersion");
-        //     } else {
-        //         $this->updateAvailable = false;
-        //         session()->flash('error', 'You are already using the latest version.');
-        //     }
-        // } catch (\Exception $e) {
-        //     session()->flash('error', "Error fetching update: " . $e->getMessage());
-        // }
-    }
-
-
-
-    public function readJsonFileFromDrive($fileName = 'echo-pos-version-config.json')
-    {
         try {
-            $client = new Client();
-            $client->setAuthConfig(public_path('storage/google/credentials.json'));
-            $client->addScope(Drive::DRIVE_READONLY);
+            $envVersion = env('APP_VERSION');
+            $url = 'https://raw.githubusercontent.com/Wuninsu/echo-pos-system/refs/heads/main/version.json';
+            $response = Http::withoutVerifying()->get($url);
 
-            $tokenPath = public_path('storage/google/token.json');
-            $accessToken = json_decode(file_get_contents($tokenPath), true);
-            $client->setAccessToken($accessToken);
-
-            if ($client->isAccessTokenExpired()) {
-                return 'Token expired. Please reauthorize.';
+            if (!$response->successful()) {
+                return false;
             }
 
-            $service = new Drive($client);
+            $data = $response->json();
 
-            // Search file by name
-            $response = $service->files->listFiles([
-                'q' => "name='$fileName' and mimeType='application/json'",
-                'fields' => 'files(id, name)',
-                'spaces' => 'drive'
-            ]);
-
-            dd($response);
-
-            if (count($response->files) == 0) {
-                return 'File not found on Google Drive.';
+            if (!isset($data['latest_version'])) {
+                return false;
             }
 
-            $fileId = $response->files[0]->id;
+            $this->latestVersion = $data['latest_version'] ?? null;
+            $this->releaseNotes = $data['release_notes'] ?? null;
 
-            // Download file content
-            $content = $service->files->get($fileId, ['alt' => 'media']);
+            if ($this->latestVersion && version_compare($data['latest_version'], $envVersion, '>')) {
+                $this->updateAvailable = true;
+                session()->flash('message', "Latest Version: $this->latestVersion");
 
-            $jsonString = $content->getBody()->getContents();
-            $data = json_decode($jsonString, true);
-
-            return $data; // return the array or do something with it
-
-        } catch (\Exception $e) {
-            return 'Error reading file from Google Drive: ' . $e->getMessage();
-        }
-    }
-
-
-    public function fetchLatestVersionFromServer()
-    {
-        try {
-            // External API call
-            $response = Http::timeout(10)->get('https://updates.yourdomain.com/api/latest-version');
-
-            if ($response->successful()) {
-                $data = $response->json(); // Automatically parses JSON to array
-
-                $this->latestVersion = $data['latestVersion'] ?? null;
-
-                if ($this->latestVersion && version_compare($this->latestVersion, $this->currentVersion, '>')) {
-                    $this->updateAvailable = true;
-                    session()->flash('message', "Latest Version: $this->latestVersion");
-                } else {
-                    $this->updateAvailable = false;
-                    session()->flash('error', 'You are already using the latest version.');
-                }
+                // You can display release notes based on the versions here:
+                $currentReleaseNotes = $this->releaseNotes[$this->latestVersion] ?? "No release notes available.";
+                session()->flash('release_notes', $currentReleaseNotes);
             } else {
-                session()->flash('error', 'Failed to fetch latest version. Server responded with status: ' . $response->status());
+                $this->updateAvailable = false;
+                session()->flash('error', 'You are already using the latest version.');
             }
         } catch (\Exception $e) {
             session()->flash('error', "Error fetching update: " . $e->getMessage());
         }
     }
 
+
     public function installUpdate()
     {
-        DB::beginTransaction();
-        $this->progress = 10;
-
         try {
-            $zipFileName = 'update.zip';
-            $updateFilePath = public_path('storage/' . $zipFileName);
+            $zipUrl = 'https://github.com/Wuninsu/echo-pos-system/archive/refs/heads/main.zip';
+            $zipPath = storage_path('app/update.zip');
+            $extractPath = storage_path('app/update');
 
-            // 1. Download the update ZIP file
-            $response = Http::timeout(30)->get($this->updateUrl);
-            $this->progress = 30;
+            // Step 1: Download ZIP
+            $response = Http::withoutVerifying()->get($zipUrl);
+            File::put($zipPath, $response->body());
 
-            if ($response->successful()) {
-                Storage::disk('public')->put($zipFileName, $response->body());
-                $this->progress = 50;
-            } else {
-                throw new \Exception('Failed to download the update.');
-            }
-
-            // 2. Backup current version
-            $backupFile = 'backup_' . now()->format('YmdHis') . '.zip';
-            $backupPath = public_path('storage/' . $backupFile);
-            $this->createBackup($backupPath);
-            $this->progress = 70;
-
-            // 3. Extract the update ZIP file
+            // Step 2: Extract ZIP
             $zip = new ZipArchive;
-            if ($zip->open($updateFilePath) === TRUE) {
-                $zip->extractTo(base_path());
+            if ($zip->open($zipPath) === true) {
+                $zip->extractTo($extractPath);
                 $zip->close();
-                $this->progress = 90;
             } else {
-                throw new \Exception('Failed to extract update.');
+                throw new \Exception("Unable to extract update ZIP.");
             }
 
-            // 4. Clean up
-            Storage::disk('public')->delete($zipFileName);
-            $this->progress = 100;
+            // Step 3: Define paths
+            $extractedDir = $extractPath . '/Echo Pos';
+            $clientDb = base_path('database/database.sqlite');
+            $uploadDir = public_path('storage');
 
-            DB::commit();
+            // Step 4: Preserve DB and uploads
+            if (file_exists("$extractedDir/database/database.sqlite")) {
+                unlink("$extractedDir/database/database.sqlite");
+            }
+            if (is_dir("$extractedDir/public/uploads")) {
+                File::deleteDirectory("$extractedDir/public/storage");
+            }
 
-            session()->flash('success', 'Update installed successfully! Please refresh the application.');
+            // Step 5: Backup
+            $this->backupFile($clientDb);
+            $this->backupDir($uploadDir);
+
+            // Step 6: Replace code
+            File::copyDirectory("$extractedDir/app", base_path('app'));
+            File::copyDirectory("$extractedDir/resources", base_path('resources'));
+            File::copyDirectory("$extractedDir/public", public_path());
+
+            session()->flash('message', 'Update installed successfully!');
         } catch (\Exception $e) {
-            DB::rollBack();
             session()->flash('error', 'Update failed: ' . $e->getMessage());
-            $this->progress = 0; // Reset on error
         }
     }
+
+    private function backupFile($path)
+    {
+        if (file_exists($path)) {
+            $backup = $path . '.' . now()->format('YmdHis') . '.bak';
+            copy($path, $backup);
+        }
+    }
+
+    private function backupDir($dir)
+    {
+        if (is_dir($dir)) {
+            $backup = $dir . '-backup-' . now()->format('YmdHis');
+            File::copyDirectory($dir, $backup);
+        }
+    }
+
+    // public function installUpdate()
+    // {
+    //     DB::beginTransaction(); // Start DB transaction
+    //     $this->progress = 10; // Begin progress tracking
+
+    //     try {
+    //         $zipFileName = 'update.zip';
+    //         $updateFilePath = public_path('storage/' . $zipFileName);
+
+    //         // 1. Download the update ZIP file from GitHub
+    //         $url = 'https://github.com/Wuninsu/echo-pos-system/archive/refs/heads/main.zip';
+    //         $response = Http::timeout(30)->withoutVerifying()->get($url);
+    //         $this->progress = 30;
+
+    //         if ($response->successful()) {
+    //             Storage::disk('public')->put($zipFileName, $response->body());
+    //             $this->progress = 50;
+    //         } else {
+    //             throw new \Exception('Failed to download the update.');
+    //         }
+
+    //         // 2. Backup current version
+    //         $backupFile = 'backup_' . now()->format('YmdHis') . '.zip';
+    //         $backupPath = public_path('storage/' . $backupFile);
+    //         $this->createBackup($backupPath);
+    //         $this->progress = 70;
+
+    //         // 3. Extract the update ZIP file
+    //         $zip = new \ZipArchive;
+    //         if ($zip->open($updateFilePath) === TRUE) {
+    //             $zip->extractTo(base_path());
+    //             $zip->close();
+    //             $this->progress = 90;
+    //         } else {
+    //             throw new \Exception('Failed to extract update.');
+    //         }
+
+    //         // 4. Clean up
+    //         Storage::disk('public')->delete($zipFileName);
+    //         $this->progress = 100;
+
+    //         DB::commit();
+
+    //         session()->flash('success', 'Update installed successfully! Please refresh the application.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         $this->progress = 0;
+    //         session()->flash('error', 'Update failed: ' . $e->getMessage());
+    //     }
+    // }
+
+
+
+    // public function installUpdate()
+    // {
+    //     DB::beginTransaction();
+    //     $this->progress = 10;
+
+    //     try {
+    //         $zipFileName = 'update.zip';
+    //         $updateFilePath = public_path('storage/' . $zipFileName);
+
+    //         // 1. Download the update ZIP file
+    //         $response = Http::timeout(30)->get($this->updateUrl);
+    //         $this->progress = 30;
+
+    //         if ($response->successful()) {
+    //             Storage::disk('public')->put($zipFileName, $response->body());
+    //             $this->progress = 50;
+    //         } else {
+    //             throw new \Exception('Failed to download the update.');
+    //         }
+
+    //         // 2. Backup current version
+    //         $backupFile = 'backup_' . now()->format('YmdHis') . '.zip';
+    //         $backupPath = public_path('storage/' . $backupFile);
+    //         $this->createBackup($backupPath);
+    //         $this->progress = 70;
+
+    //         // 3. Extract the update ZIP file
+    //         $zip = new ZipArchive;
+    //         if ($zip->open($updateFilePath) === TRUE) {
+    //             $zip->extractTo(base_path());
+    //             $zip->close();
+    //             $this->progress = 90;
+    //         } else {
+    //             throw new \Exception('Failed to extract update.');
+    //         }
+
+    //         // 4. Clean up
+    //         Storage::disk('public')->delete($zipFileName);
+    //         $this->progress = 100;
+
+    //         DB::commit();
+
+    //         session()->flash('success', 'Update installed successfully! Please refresh the application.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         session()->flash('error', 'Update failed: ' . $e->getMessage());
+    //         $this->progress = 0; // Reset on error
+    //     }
+    // }
 
     private function createBackup($backupPath)
     {
