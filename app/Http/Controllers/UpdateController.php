@@ -72,23 +72,34 @@ class UpdateController extends Controller
 
 
 
-    public function checkVersion()
+    static public function checkVersion()
     {
         $envVersion = env('APP_VERSION');
+        $response = Http::withoutVerifying()->get('https://runapi.rf.gd/api/latest-version');
 
-        $response = Http::get(url('/api/latest-version'));
+        dd($response->body());
 
-        if (!$response->successful()) {
+
+
+        try {
+            $response = Http::withoutVerifying()->get('https://runapi.rf.gd/api/latest-version');
+
+            if (!$response->successful()) {
+                return false;
+            }
+
+            $data = $response->json();
+
+            if (!isset($data['latest_version'])) {
+                return false;
+            }
+
+            return version_compare($data['latest_version'], $envVersion, '>');
+        } catch (\Exception $e) {
+            // You can optionally log the error
+            // Log::error('Version check failed: ' . $e->getMessage());
             return false;
         }
-
-        $data = $response->json();
-
-        if (!isset($data['latest_version'])) {
-            return false;
-        }
-
-        return version_compare($data['latest_version'], $envVersion, '>');
     }
 
     public function update()
@@ -150,7 +161,7 @@ class UpdateController extends Controller
     }
 
 
-     // Function to update APP_VERSION in the .env file
+    // Function to update APP_VERSION in the .env file
     protected function updateEnvVersion($latestVersion)
     {
         $envFilePath = base_path('.env');

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Http\Controllers\UpdateController;
 use App\Models\ActivityLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -22,16 +23,9 @@ use Illuminate\Support\Facades\Log;
 class SystemInfo extends Component
 {
     public $files = [];
-
-
-    public function mount()
-    {
-        $this->loadBackups();
-        $this->files = $this->listFilesFromGoogleDrive();
-    }
     public array $backups = [];
 
-    public $currentVersion = '1.0.0'; // Set your current app version
+    public $currentVersion;
     public $latestVersion;
     public $updateAvailable = false;
     public int $progress = 0;
@@ -39,6 +33,13 @@ class SystemInfo extends Component
     public $updateUrl = 'https://drive.google.com/uc?export=download&id=1WguHAteSjuIIXvX-EArjwXdNV074sjw5';
 
     public $currentTab = 'overview';
+
+    public function mount()
+    {
+        $this->loadBackups();
+        $this->files = $this->listFilesFromGoogleDrive();
+        $this->currentVersion = env('APP_VERSION');
+    }
 
 
     public function switchTab($tabId)
@@ -48,7 +49,7 @@ class SystemInfo extends Component
 
     public function checkForUpdate()
     {
-        $updateData = $this->readJsonFileFromDrive('echo-pos-version-config.json');
+        $updateData = UpdateController::checkVersion();
         dd($updateData);
         if ($updateData && isset($updateData['latestVersion'])) {
             $this->latestVersion = $updateData['latestVersion'];
