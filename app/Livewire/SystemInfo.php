@@ -14,6 +14,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use ZipArchive;
 use Illuminate\Http\UploadedFile;
+use App\Models\SettingsModel;
 
 use Google\Client;
 use Google\Service\Drive;
@@ -29,6 +30,8 @@ class SystemInfo extends Component
     public $latestVersion;
     public $updateAvailable = false;
     public $releaseNotes;
+    public $successMessage = null;
+    public $errorMessage = null;
     public int $progress = 0;
 
     public $updateUrl = 'https://drive.google.com/uc?export=download&id=1WguHAteSjuIIXvX-EArjwXdNV074sjw5';
@@ -478,6 +481,28 @@ class SystemInfo extends Component
         return $fileList;
     }
 
+
+    public function sendUpdateRequest()
+    {
+        $sett = SettingsModel::getSettingsData();
+        $businessName = $sett['business_name'];
+
+        try {
+            $data = [
+                'phone' => '0599678749',
+                'message' => "A request for an update was triggered in the $businessName application. Please review the version update."
+            ];
+            // Send OTP
+            $response = sendSMS($data);
+            if (!$response) {
+                $this->errorMessage = 'Failed to send update request.';
+            } else {
+                $this->successMessage = 'Update request sent successfully!';
+            }
+        } catch (\Exception $e) {
+            $this->errorMessage = 'Error sending SMS: ' . $e->getMessage();
+        }
+    }
 
 
     #[Title('System Info')]

@@ -144,20 +144,20 @@
 
                 <div class="mt-3">
 
-                    <button type="button" wire:click="checkForUpdate" class="btn btn-primary"
-                        wire:loading.attr="disabled">
-                        <span wire:loading.remove>Check for Updates</span>
-                        <span wire:loading wire:target="checkForUpdate">
-                            <span>
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Checking for updates...
-                            </span>
+                    <button wire:click="checkForUpdate" wire:loading.attr="disabled" wire:target="checkForUpdate"
+                        class="btn btn-primary position-relative">
+
+                        <span wire:loading.remove wire:target="checkForUpdate">
+                            Check for Updates
+                        </span>
+                        <!-- Loader Spinner -->
+                        <span wire:loading wire:target="checkForUpdate"
+                            class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true">
                         </span>
                     </button>
-
                 </div>
 
-                @if ($updateAvailable)
+                {{-- @if ($updateAvailable)
                     <div class="mt-3 alert alert-warning">
                         <strong>A new update (v{{ $latestVersion }}) is available!</strong> Would you like to install
                         it now?
@@ -170,12 +170,39 @@
                             </button>
                         </div>
                     </div>
-                @endif
+                @endif --}}
 
                 @if (session('release_notes'))
-                    <div class="alert alert-info">
+                    <div class="alert alert-info mt-3">
                         <strong>Release Notes for Version {{ $latestVersion }}:</strong>
                         <p>{{ session('release_notes') }}</p>
+
+                        <!-- Button to trigger SMS update request -->
+                        <button wire:click="sendUpdateRequest" wire:loading.attr="disabled"
+                            wire:target="sendUpdateRequest" class="btn btn-warning position-relative">
+
+                            <span wire:loading.remove wire:target="sendUpdateRequest">
+                                Request Update from Developers
+                            </span>
+                            <!-- Loader Spinner -->
+                            <span wire:loading wire:target="sendUpdateRequest"
+                                class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true">
+                            </span>
+                        </button>
+
+
+                        <!-- Display success or error messages -->
+                        @if ($successMessage)
+                            <div class="alert alert-success mt-2">
+                                {{ $successMessage }}
+                            </div>
+                        @endif
+
+                        @if ($errorMessage)
+                            <div class="alert alert-danger mt-2">
+                                {{ $errorMessage }}
+                            </div>
+                        @endif
                     </div>
                 @endif
 
