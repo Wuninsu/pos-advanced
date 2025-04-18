@@ -54,6 +54,8 @@ Route::middleware(['auth', 'isOnline', 'checkRole:admin,manager'])->group(functi
 
     Route::get('/settings/config', Settings::class)->name('settings');
     Route::get('/settings/system-info', SystemInfo::class)->name('settings.sys-info');
+    Route::get('/settings/preferences', \App\Livewire\PreferencesSettings::class)->name('settings.preferences');
+
 
     Route::get('/google-auth', function () {
         $client = new Client();

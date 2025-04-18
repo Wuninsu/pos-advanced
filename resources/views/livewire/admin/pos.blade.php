@@ -105,9 +105,21 @@
 
         <div class="col-md-4 mx-0 p-0 ps-lg-2">
             <div class="card p-2 border border-secondary" style="height: 90vh">
-                <div class="card-header bg-light">
-                    <h5>Checkout ({{ count($cartItems) }})</h5>
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        Checkout ({{ count($cartItems) }})
+                    </h5>
+
+                    <button wire:click="toggleCartSound" class="btn btn-sm btn-outline-secondary"
+                        title="Toggle Cart Sound">
+                        @if ($cartSoundEnabled)
+                            <i class="fas fa-volume-up text-success"></i> <!-- FontAwesome icon for sound on -->
+                        @else
+                            <i class="fas fa-volume-mute text-muted"></i> <!-- FontAwesome icon for sound off -->
+                        @endif
+                    </button>
                 </div>
+
                 <div id="cart-items">
                     <table class="table table-bordered mb-4 ">
                         <thead class="table-light">

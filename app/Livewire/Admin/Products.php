@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Exports\ExportProducts;
 use App\Models\CategoriesModel;
 use App\Models\ProductsModel;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
@@ -42,11 +43,19 @@ class Products extends Component
     #[On('delete-order')]
     public function handleDelete()
     {
+        if (!can_cashier_delete_data()) {
+            return;
+        }
         $user = auth('web')->user();
         $uid = $user->uuid;
         $product = ProductsModel::where('uuid', $this->productUid)
             ->with('supplier')
             ->firstOrFail();
+
+        // Unlink image before deleting
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
+            Storage::disk('public')->delete($product->image);
+        }
         // if (!in_array($user->role, ['admin', 'manager'])) {
         //     $product->status = false;
         //     $product->save();
@@ -64,6 +73,9 @@ class Products extends Component
 
     public function confirmDelete($uuid)
     {
+        if (!can_cashier_delete_data()) {
+            return;
+        }
         $product = ProductsModel::where('uuid', $uuid)->firstOrFail();
         $this->productUid = $product->uuid;
         $this->showDelete = true;

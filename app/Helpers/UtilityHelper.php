@@ -5,6 +5,7 @@ use App\Models\ProductsModel;
 use App\Models\settingsModel;
 use App\Models\SettingsModel as ModelsSettingsModel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -38,6 +39,23 @@ if (!function_exists('uploadFile')) {
     }
 }
 
+if (!function_exists('can_cashier_delete_data')) {
+    function can_cashier_delete_data(): bool
+    {
+        $user = Auth::user();
+
+        if ($user && $user->role === 'cashier') {
+            $isAllowed = DB::table('preferences')->where('key', 'allow_cashier_delete_data')->value('value');
+
+            if (!$isAllowed) {
+                toastr('You are not allowed to delete data.', 'warning');
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
 
 if (!function_exists('paginationLimit')) {
     function paginationLimit()

@@ -49,6 +49,9 @@ class Orders extends Component
 
     public function confirmDelete($orderNum)
     {
+        if (!can_cashier_delete_data()) {
+            return;
+        }
         $order = OrdersModel::where('order_number', $orderNum)
             ->with('customer') // Eager load the related customer
             ->firstOrFail();

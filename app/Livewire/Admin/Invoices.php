@@ -48,6 +48,9 @@ class Invoices extends Component
     }
     public function confirmDelete($invoiceNum)
     {
+        if (!can_cashier_delete_data()) {
+            return;
+        }
         $invoice = ModelsInvoices::where('invoice_number', $invoiceNum)->firstOrFail();
         $this->invoiceNum = $invoice->invoice_number;
         $this->showDelete = true;

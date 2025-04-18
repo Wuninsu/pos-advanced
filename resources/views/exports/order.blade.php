@@ -14,50 +14,6 @@
             $settings = App\Models\SettingsModel::getSettingsData(); // Get all settings once
         @endphp
         <div class="">
-            {{-- <div class="px-14 py-6">
-                <table class="w-full border-collapse border-spacing-0">
-                    <tbody>
-                        <tr>
-                            <td class="w-full align-top">
-                                <div>
-                                    <img src="{{ public_path('storage/' . ($settings['logo'] ?? NO_IMAGE)) }}"
-                                        class="h-12" />
-                                </div>
-                            </td>
-
-                            <td class="align-top">
-                                <div class="text-sm">
-                                    <table class="border-collapse border-spacing-0">
-                                        <tbody>
-                                            <tr>
-                                                <td class="border-r pr-4">
-                                                    <div>
-                                                        <p class="whitespace-nowrap text-slate-400 text-right">
-                                                            Date</p>
-                                                        <p class="whitespace-nowrap font-bold text-main text-right">
-                                                            {{ optional($order->created_at)->format('jS M Y ') ?? 'N/A' }}
-                                                        </p>
-                                                    </div>
-                                                </td>
-                                                <td class="pl-4">
-                                                    <div>
-                                                        <p class="whitespace-nowrap text-slate-400 text-right">
-                                                            Invoice #
-                                                        </p>
-                                                        <p class="whitespace-nowrap font-bold text-main text-right">
-                                                            {{ $order->order_number ?? 'N/A' }}</p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> --}}
-
             <div class="bg-slate-100 px-14 py-6 text-sm">
                 <table class="w-full border-collapse border-spacing-0">
                     <tbody>

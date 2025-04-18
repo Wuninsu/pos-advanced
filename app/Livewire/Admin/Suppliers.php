@@ -30,12 +30,18 @@ class Suppliers extends Component
 
     public function confirmDelete($id)
     {
+        if (!can_cashier_delete_data()) {
+            return;
+        }
         $this->supplierId = $id;
         $this->showDelete = true;
     }
 
     public function handleDelete()
     {
+        if (!can_cashier_delete_data()) {
+            return;
+        }
         if ($this->supplierId) {
             $supplier = SuppliersModel::findOrFail($this->supplierId);
             if ($supplier) {

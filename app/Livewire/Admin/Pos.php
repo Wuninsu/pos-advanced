@@ -54,9 +54,7 @@ class Pos extends Component
     public $orders = [];
 
     public $customer;
-
-
-
+    public bool $cartSoundEnabled;
 
 
     public $order;
@@ -65,6 +63,7 @@ class Pos extends Component
 
     public function mount()
     {
+        $this->cartSoundEnabled = DB::table('preferences')->where('key', 'enable_cart_sound')->value('value') ?? false;
         $this->categories = CategoriesModel::latest()->get(); // Replace with your category model
         $this->search = ''; // Initialize search as an empty string
         $this->products = collect(); // Initialize an empty collection for products
@@ -72,6 +71,15 @@ class Pos extends Component
         $this->getLastOrder();
     }
 
+    public function toggleCartSound()
+    {
+        $this->cartSoundEnabled = !$this->cartSoundEnabled;
+
+        DB::table('preferences')->updateOrInsert(
+            ['key' => 'enable_cart_sound'],
+            ['value' => $this->cartSoundEnabled]
+        );
+    }
     public function getLastOrder()
     {
         $lastOrder = OrdersModel::with('orderDetails.product')->latest()->first();
@@ -137,7 +145,12 @@ class Pos extends Component
             }
 
             toastr()->success('Product added to cart.');
-            $this->dispatch('playAddToCartSound');
+
+            // Check if preference is enabled
+            $enableSound = DB::table('preferences')->where('key', 'enable_cart_sound')->value('value');
+            if ($enableSound) {
+                $this->dispatch('playAddToCartSound');
+            }
         } else {
             toastr()->error('Product is out of stock.');
         }

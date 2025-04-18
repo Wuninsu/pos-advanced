@@ -41,7 +41,6 @@ class Users extends Component
     {
         if ($this->user_uuid) {
             $user = ModelsUser::where('uuid', $this->user_uuid)->firstOrFail();
-
             if ($user) {
                 $user->delete();
                 toastr()->success('User deleted successfully.');

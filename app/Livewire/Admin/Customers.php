@@ -20,6 +20,9 @@ class Customers extends Component
 
     public function confirmDelete($id)
     {
+        if (!can_cashier_delete_data()) {
+            return;
+        }
         $this->customerId = $id;
         $this->showDelete = true;
     }

@@ -85,6 +85,9 @@ class Categories extends Component
 
     public function confirmDelete($id)
     {
+        if (!can_cashier_delete_data()) {
+            return;
+        }
         $category = CategoriesModel::findOrFail($id);
         $this->category_id = $category->id;
         $this->showDelete = true;
@@ -115,7 +118,7 @@ class Categories extends Component
 
     public function exportAs($type)
     {
-      return Excel::download(new ExportCategories, now() . '_categories.' . $type);
+        return Excel::download(new ExportCategories, now() . '_categories.' . $type);
     }
 
     #[Title('Categories')]

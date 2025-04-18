@@ -98,6 +98,10 @@
                                       <a class="nav-link @if (in_array(request()->segment(2), ['system-info'])) active @endif"
                                           href="{{ route('settings.sys-info') }}">System Info</a>
                                   </li>
+                                  <li class="nav-item">
+                                      <a class="nav-link @if (in_array(request()->segment(2), ['preferences'])) active @endif"
+                                          href="{{ route('settings.preferences') }}">Preferences</a>
+                                  </li>
                               @endif
 
                               <li class="nav-item">

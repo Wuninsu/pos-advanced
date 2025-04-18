@@ -46,13 +46,13 @@
                                     &#128181; Cash
                                 </label>
                             </div>
-                            <div class="radio-item">
+                            {{-- <div class="radio-item">
                                 <input type="radio" wire:model.live="paymentMethod" value="online"
                                     id="payment_method_mobile" class="radio-input">
                                 <label for="payment_method_mobile" class="radio-label">
                                     &#128179; Online
                                 </label>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
