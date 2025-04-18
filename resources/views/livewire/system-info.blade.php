@@ -258,16 +258,12 @@
                                                 <td>
                                                     <button wire:click="download('{{ $file }}')"
                                                         class="btn btn-primary btn-sm">
-                                                        <span wire:ignore><i data-feather="download"
-                                                                class="icon-xs"></i></span>
                                                         Download
                                                     </button>
 
                                                     <button type="button"
                                                         wire:click="confirmDelete('{{ $file }}')"
                                                         class="btn btn-sm btn-danger">
-                                                        <span wire:ignore><i data-feather="trash-2"
-                                                                class="icon-xs"></i></span>
                                                         Delete
                                                     </button>
                                                 </td>

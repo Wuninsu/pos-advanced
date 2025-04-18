@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use ZipArchive;
@@ -316,10 +317,24 @@ class SystemInfo extends Component
         $tempPath = storage_path("app/temp_backup.sqlite");
         $zipPath = storage_path("app/temp_backup.zip");
 
+        $sett = SettingsModel::getSettingsData();
+        $businessName = Str::slug($sett['business_name']);
+
         try {
+            // ✅ Step 0: Check Internet Connectivity
+            if (!$this->isInternetAvailable()) {
+                toastr()->error('No internet connection. Please check your network and try again.');
+                $this->dispatch('backup-status', data: [
+                    'type' => 'error',
+                    'message' => 'No internet connection. Please check your network.',
+                ]);
+                return;
+            }
+
             // Step 1: Copy the database
             if (!copy($sqlitePath, $tempPath)) {
-                throw new \Exception('Failed to copy SQLite file.');
+                toastr()->error('Failed to copy SQLite file.');
+                return;
             }
 
             // Step 2: Create ZIP archive
@@ -328,7 +343,8 @@ class SystemInfo extends Component
                 $zip->addFile($tempPath, "sqlite_backup_{$timestamp}.sqlite");
                 $zip->close();
             } else {
-                throw new \Exception('Failed to create ZIP archive.');
+                toastr()->error('Failed to create ZIP archive.');
+                return;
             }
 
             // Step 3: Upload to local storage
@@ -340,16 +356,18 @@ class SystemInfo extends Component
                 true
             );
 
-            $uploadedPath = uploadFile($uploaded, 'backups', "sqlite_backup_{$timestamp}");
+            $uploadedPath = uploadFile($uploaded, 'backups', "{$businessName}_backup_{$timestamp}");
 
             // Step 4: Upload to Google Drive
             $this->uploadToGoogleDrive('storage/' . $uploadedPath);
             $this->loadBackups();
-            toastr('Backup created and successfully uploaded to developers server!', 'success');
+
+            toastr('Backup created and successfully uploaded to developer server!', 'success');
             $this->dispatch('backup-status', data: [
                 'type' => 'success',
-                'message' => '✅ Backup created and successfully uploaded to developers server!',
+                'message' => 'Backup created and successfully uploaded to developers server!',
             ]);
+
             // Step 5: Clean up
             @unlink($tempPath);
             @unlink($zipPath);
@@ -359,12 +377,9 @@ class SystemInfo extends Component
             return $uploadedPath;
         } catch (\Throwable $e) {
             DB::rollBack();
-
-            // Cleanup even if it fails
             @unlink($tempPath);
             @unlink($zipPath);
 
-            // Log the error with context
             Log::error('SQLite backup failed', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
@@ -372,9 +387,20 @@ class SystemInfo extends Component
                 'trace' => $e->getTraceAsString()
             ]);
 
-            throw new \Exception('SQLite backup and upload failed. Check logs for details.');
+            toastr()->error('SQLite backup and upload failed. Check logs for details.');
         }
     }
+
+    protected function isInternetAvailable(): bool
+    {
+        try {
+            Http::timeout(5)->get('https://www.google.com');
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 
     public function loadBackups()
     {
