@@ -27,9 +27,9 @@ class UserSeeder extends Seeder
                 'uuid' => Str::uuid()->toString(),
             ],
             // [
-            //     'username' => 'cahier',
-            //     'email' => 'cahier@mail.com',
-            //     'role' => 'cashier',
+            //     'username' => 'salesrep',
+            //     'email' => 'salesrep@mail.com',
+            //     'role' => 'salesrep',
             //     'password' => Hash::make('test1234'),
             //     'status' => 1,
             //     'created_at' => now(),

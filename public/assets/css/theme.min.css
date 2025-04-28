@@ -23509,8 +23509,8 @@ fieldset:disabled .btn {
     color: var(--dashui-gray-600);
     display: flex;
     font-weight: 500;
-    line-height: 1.8;
-    padding: 0.5rem 1.5rem;
+    line-height: 1.5;
+    padding: 0.3rem 1.5rem;
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
     white-space: nowrap;
@@ -23523,10 +23523,11 @@ fieldset:disabled .btn {
     opacity: 1;
 }
 .navbar-vertical .navbar-nav .nav-item .nav-link.active {
-    color: var(--dashui-primary);
+    color: #fff !important;
+    background-color: var(--dashui-primary);
 }
 .navbar-vertical .navbar-nav .nav-item .nav-link.active .nav-icon {
-    color: var(--dashui-primary);
+    color: white;
     opacity: 1;
 }
 .navbar-vertical .navbar-nav .nav-item .nav-link[data-bs-toggle="collapse"] {

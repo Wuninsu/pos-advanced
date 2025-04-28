@@ -25,7 +25,7 @@ class SettingsSeeder extends Seeder
             ['key' => 'motto', 'value' => 'We Help your Business Strived'],
             ['key' => 'note', 'value' => 'This system is designed to streamline and automate key administrative and academic processes within a school'],
             ['key' => 'paystack_secret_key', 'value' => 'sk_test_xxxxxxxxxxxxxxxxxxxxxx'],
-            ['key' => 'currency', 'value' => 'Ghs'],
+            ['key' => 'currency', 'value' => 'GHS'],
             ['key' => 'low_stock', 'value' => '100'],
             ['key' => 'timezone', 'value' => 'Africa/Accra'],
             ['key' => 'date_format', 'value' => 'Y-m-d'],

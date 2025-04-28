@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use App\Models\CategoriesModel;
 use App\Models\ProductsModel;
 use App\Models\SuppliersModel;
+use App\Models\Unit;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -16,15 +17,13 @@ class ProductForm extends Component
     use WithFileUploads;
 
     public $status, $sku, $barcode, $product_id;
-    public $category;
-    public $supplier;
-    public $name;
-    public $price;
-    public $stock;
-    public $description;
+    public $description, $stock, $price, $name, $supplier, $category;
     public $image, $showImg;
 
-    public $categories, $suppliers;
+    public $categories, $suppliers, $units;
+    public $unit;
+
+
 
     public function rules()
     {
@@ -39,6 +38,7 @@ class ProductForm extends Component
             'status' => 'nullable|boolean',
             'sku' => 'nullable|string|max:100|unique:products,sku,' . $this->product_id,
             'barcode' => 'nullable|string|max:100|unique:products,barcode,' . $this->product_id,
+            'unit' => 'required|string|max:20',
         ];
     }
 
@@ -53,6 +53,7 @@ class ProductForm extends Component
             $this->description = $product->description;
             $this->stock = $product->stock;
             $this->price = $product->price;
+            $this->unit = $product->unit_id;
 
             $this->supplier = $product->supplier_id;
             $this->category = $product->category_id;
@@ -62,6 +63,7 @@ class ProductForm extends Component
 
         $this->categories = CategoriesModel::all();
         $this->suppliers = SuppliersModel::all();
+        $this->units = Unit::all();
     }
 
 
@@ -96,13 +98,27 @@ class ProductForm extends Component
                 'category_id' => $this->category,
                 'supplier_id' => $this->supplier,
                 'img' => $filePath,
+                'unit_id' => $this->unit,
                 'user_id' => Auth::user()->id,
             ]
         );
 
         if (!$this->product_id) {
-            $this->reset();
+            $this->reset([
+                'name',
+                'sku',
+                'barcode',
+                'status',
+                'description',
+                'price',
+                'stock',
+                'category',
+                'supplier',
+                'image',
+                'unit',
+            ]);
         }
+
         toastr()->success($this->product_id ? 'Product updated successfully!' : 'Product created successfully!');
         $this->reset();
         $this->clearTemporaryFiles();

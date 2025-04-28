@@ -10,6 +10,31 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+if (!function_exists('generateSmsMessage')) {
+    /**
+     * Generate an SMS message from a template and replace placeholders.
+     *
+     * @param string $templateKey The key or identifier of the template.
+     * @param array $data The data to replace in the template.
+     * @return string|null The generated SMS message or null if template not found.
+     */
+    function generateSmsMessage(string $templateKey, array $data): ?string
+    {
+        $template = \App\Models\SMSTemplate::where('name', $templateKey)->first();
+
+        if (!$template) {
+            return false;
+        }
+        $message = $template->template;
+
+        // Replace placeholders with data
+        foreach ($data as $key => $value) {
+            $message = str_replace("{{$key}}", $value, $message);
+        }
+
+        return $message;
+    }
+}
 
 if (!function_exists('uploadFile')) {
     /**
@@ -39,16 +64,16 @@ if (!function_exists('uploadFile')) {
     }
 }
 
-if (!function_exists('can_cashier_delete_data')) {
-    function can_cashier_delete_data(): bool
+if (!function_exists('preference')) {
+    function preference(string $preference): bool
     {
         $user = Auth::user();
 
-        if ($user && $user->role === 'cashier') {
-            $isAllowed = DB::table('preferences')->where('key', 'allow_cashier_delete_data')->value('value');
+        if ($user && $user->role === 'salesrep') {
+            $isAllowed = DB::table('preferences')->where('key', $preference)->value('value');
 
             if (!$isAllowed) {
-                toastr('You are not allowed to delete data.', 'warning');
+                toastr('You are not allowed to delete this data.', 'warning');
                 return false;
             }
         }
@@ -56,6 +81,57 @@ if (!function_exists('can_cashier_delete_data')) {
         return true;
     }
 }
+
+if (!function_exists('isComingDue')) {
+    /**
+     * Check if a credit sale is coming due.
+     *
+     * @param  string|\Carbon\Carbon  $dueDate
+     * @param  int  $daysBefore  How many days before due date to consider "coming due"
+     * @return bool
+     */
+    function isComingDue($dueDate, $daysBefore = 3) // default: 3 days early
+    {
+        $dueDate = Carbon::parse($dueDate);
+        $now = Carbon::now();
+
+        // Check if the due date is within the next X days but still in the future
+        return $now->lte($dueDate) && $now->diffInDays($dueDate, false) <= $daysBefore;
+    }
+}
+
+// $creditSales = CreditSale::whereDate('due_date', '>=', now())
+//     ->get()
+//     ->filter(function ($sale) {
+//         return isComingDue($sale->due_date);
+//     });
+
+if (!function_exists('getComingDueSales')) {
+    /**
+     * Get all coming due credit sales.
+     *
+     * @param  \Illuminate\Database\Eloquent\Collection  $sales
+     * @param  int  $daysBefore  How many days before due date to consider "coming due"
+     * @return \Illuminate\Support\Collection
+     */
+    function getComingDueSales($sales, $daysBefore = 3)
+    {
+        return $sales->filter(function ($sale) use ($daysBefore) {
+            return isComingDue($sale->due_date, $daysBefore);
+        });
+    }
+}
+
+// // Get all credit sales
+// $allSales = CreditSale::where('status', 'credit')->get();
+
+// // Get only the ones coming due within the next 3 days
+// $comingDueSales = getComingDueSales($allSales);
+
+// // Example: Loop them
+// foreach ($comingDueSales as $sale) {
+//     echo "Sale ID {$sale->id} is coming due on {$sale->due_date}<br>";
+// }
 
 if (!function_exists('paginationLimit')) {
     function paginationLimit()
@@ -103,7 +179,7 @@ if (!function_exists('generateTransactionNumber')) {
 }
 
 if (!function_exists('generateOrderNumber')) {
-    function generateOrderNumber(string $column = 'order_number', string $prefix = 'ORD-', int $length = 5)
+    function generateOrderNumber(string $column = 'order_number', string $prefix = 'ORD', int $length = 5)
     {
         $data = DB::table('orders')
             ->whereNotNull($column)
@@ -129,7 +205,7 @@ if (!function_exists('generateOrderNumber')) {
 
 
 if (!function_exists('generateInvoiceNumber')) {
-    function generateInvoiceNumber(string $column = 'invoice_number', string $prefix = 'INV-', int $length = 5)
+    function generateInvoiceNumber(string $column = 'invoice_number', string $prefix = 'INV', int $length = 5)
     {
         $data = DB::table('invoices')
             ->whereNotNull($column)

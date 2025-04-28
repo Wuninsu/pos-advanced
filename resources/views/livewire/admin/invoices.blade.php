@@ -46,8 +46,7 @@
                                     <th>#</th>
                                     <th class="pe-0">Invoice ID</th>
                                     <th>Customer</th>
-                                    <th>Tax</th>
-                                    <th>Amount({!! $settings['currency'] ?? 'Ghs' !!})</th>
+                                    <th>Amount({!! $settings['currency'] ?? 'GHS' !!})</th>
                                     <th>Status</th>
                                     <th>Date</th>
                                     <th>Action</th>
@@ -58,9 +57,8 @@
                                     <tr>
                                         <td class="pe-0">{{ $invoices->firstItem() + $loop->index }}</td>
                                         <td>#{{ $invoice->invoice_number }}</td>
-                                        <td>{{ $invoice->order->customer->name ?? 'N/A' }}</td>
-                                        <td>{{ $invoice->tax_amount }}</td>
-                                        <td>{{ $invoice->total_amount }}</td>
+                                        <td>{{ $invoice->customer->name ?? 'N/A' }}</td>
+                                        <td>{{ $invoice->amount_payable }}</td>
                                         <td>
                                             @if ($invoice->status === 'paid')
                                                 <span class="badge badge-success-soft text-success">Paid</span>
@@ -75,7 +73,7 @@
                                             <a href="{{ route('invoices.details', ['invoice' => $invoice->invoice_number]) }}"
                                                 class="btn btn-primary btn-sm"><i data-feather="eye"
                                                     class="icon-xs"></i> View</a>
-                                            <a href="{{ route('invoices.edit', ['invoice' => $invoice->uuid]) }}"
+                                            <a href="{{ route('invoices.edit', ['invoice' => $invoice->invoice_number]) }}"
                                                 class="btn btn-dark btn-sm"><i data-feather="edit" class="icon-xs"></i>
                                                 Edit</a>
                                             <button type="button"

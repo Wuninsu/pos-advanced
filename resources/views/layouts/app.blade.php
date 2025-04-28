@@ -29,6 +29,7 @@
     <!-- Theme CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/theme.min.css') }}">
     <link href="{{ asset('assets/libs/dropzone/dist/dropzone.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
 
 
     <!-- Google tag (gtag.js) -->
@@ -299,6 +300,89 @@
         .search-container .list-group-item:hover {
             background-color: #f8f9fa;
         }
+
+        .dropdown-top {
+            top: auto !important;
+            bottom: 100%;
+            margin-top: 0 !important;
+            margin-bottom: 0.5rem;
+        }
+
+
+
+        /* Container Styles */
+        .payment-label {
+            font-size: 1.125rem;
+            /* text-lg */
+            font-weight: 500;
+            /* font-medium */
+            color: #4b5563;
+            /* text-gray-700 */
+            margin-bottom: 0.75rem;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Radio Item Styles */
+        .radio-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Hide the default radio input */
+        .radio-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Label Styles */
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            /* text-sm */
+            color: #6b7280;
+            /* text-gray-600 */
+            background-color: #fff;
+            /* bg-white */
+            border: 1px solid #d1d5db;
+            /* border-gray-300 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            /* shadow-sm */
+        }
+
+        /* Hover and Focus States */
+        .radio-label:hover {
+            border-color: #9ca3af;
+            /* border-gray-400 */
+        }
+
+        /* Checked State */
+        .radio-input:checked+.radio-label {
+            border-color: green;
+            /* border-blue-500 */
+            background-color: green;
+            /* bg-blue-50 */
+            color: white;
+            /* text-blue-500 */
+        }
+
+        /* Icon Styles */
+        .radio-label i {
+            font-size: 1rem;
+            /* Ensure icons align well */
+        }
     </style>
 </head>
 
@@ -445,6 +529,7 @@
     <script src="{{ asset('assets/js/charts.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/print.js') }}"></script>
+    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     {{--
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
@@ -534,7 +619,10 @@
 
         renderNotifications();
     </script> --}}
-
+    <script>
+        $("#selector").select2();
+        $(".selector").select2();
+    </script>
     <script>
         const notifications = [];
 

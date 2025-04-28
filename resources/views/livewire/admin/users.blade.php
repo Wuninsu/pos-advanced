@@ -13,7 +13,7 @@
                             <select class="form-select" wire:model.live="search_role">
                                 <option value="">Choose role</option>
                                 <option value="admin">Admin</option>
-                                <option value="cashier">Cashier</option>
+                                <option value="salesrep">Sales Rep</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-2 ">

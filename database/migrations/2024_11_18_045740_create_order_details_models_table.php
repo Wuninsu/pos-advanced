@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('quantity')->default(0);
             $table->decimal('unit_price', 10, 2)->default(0.00);
             $table->decimal('total_amount', 10, 2)->default(0.00);
-            $table->decimal('discount', 10, 2)->default(0.00);
             $table->text('description')->nullable();
             $table->timestamps();
         });

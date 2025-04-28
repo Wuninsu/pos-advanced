@@ -56,10 +56,11 @@ Route::middleware(['auth', 'isOnline', 'checkRole:admin,manager'])->group(functi
     Route::get('/settings/system-info', SystemInfo::class)->name('settings.sys-info');
     Route::get('/settings/preferences', \App\Livewire\PreferencesSettings::class)->name('settings.preferences');
 
+    Route::get('/reports', App\Livewire\Admin\Reports::class)->name('reports');
 
     Route::get('/google-auth', function () {
         $client = new Client();
-        $client->setAuthConfig(storage_path('app/google/credentials.json'));
+        $client->setAuthConfig(storage_path('storage/google/credentials.json'));
         $client->setAccessType('offline');
         $client->setPrompt('select_account consent');
         $client->addScope('https://www.googleapis.com/auth/drive.file');
@@ -123,18 +124,21 @@ Route::middleware(['auth', 'isOnline', 'checkRole:admin,manager'])->group(functi
 //     return $filePath; // Return the path where the file is saved locally
 // }
 // General route
-Route::middleware(['auth', 'isOnline', 'checkRole:admin,cashier,manager'])->group(function () {
+Route::middleware(['auth', 'isOnline', 'checkRole:admin,salesrep,manager'])->group(function () {
 
     Route::get('/users/edit/{user}', UserForm::class)->name('users.edit');
 
-    Route::get('/categories', Categories::class)->name('categories');
+    Route::get('categories/product-categories', Categories::class)->name('categories');
     Route::get('/categories/category/{category}/products', CategoryInfo::class)->name('category.products.info');
+    Route::get('/categories/unit-of-measurements', \App\Livewire\Admin\UnitsIndex::class)->name('category.units');
+    Route::get('/categories/service-categories', \App\Livewire\Admin\Services::class)->name('category.services');
+
 
     Route::get('/products', Products::class)->name('products');
     Route::get('products/create', ProductForm::class)->name('products.create');
     Route::get('/products/edit/{product}', ProductForm::class)->name('products.edit');
 
-    Route::get('/orders', Orders::class)->name('orders');
+    Route::get('/sales', Orders::class)->name('orders');
 
     Route::get('/users/profile/{user}', ProfileForm::class)->name('users.profile');
 
@@ -174,10 +178,24 @@ Route::middleware(['auth', 'isOnline', 'checkRole:admin,cashier,manager'])->grou
 
     Route::get('/receipt/{orderId}', [OrdersController::class, 'generateReceipt'])->name('generateReceipt');
 
+    Route::get('/services', App\Livewire\Admin\Services::class)->name('services');
+    Route::get('/services/service-requests', App\Livewire\Admin\ServiceRequests::class)->name('service.requests');
+    Route::get('/services/edit-service-request/{request}', App\Livewire\Forms\ServiceRequestForm::class)->name('service.request.edit');
+    Route::get('/services/add-service-request/', App\Livewire\Forms\ServiceRequestForm::class)->name('service.request.add');
 
+    Route::get('/services/service-requests/{request}/show', App\Livewire\ServiceRequestShow::class)->name('service.request.show');
 
     Route::get('/products/stock-level/{type}', App\Livewire\StockAlerts::class)->name('products.stock-levels');
     // Route::get('/products/out-of-stock', StockAlerts::class)->name('products.outofstock');
+
+
+    Route::get('/sms/sms-templates', App\Livewire\Admin\SmsTemplates::class)->name('sms.sms-templates');
+
+    Route::get('/sms/sms-logs', App\Livewire\Admin\SmsLogs::class)->name('sms.sms-logs');
+
+    Route::get('/debtors', App\Livewire\Admin\Debtors::class)->name('debtors');
+
+    Route::get('/expenditures', App\Livewire\Admin\Expenditures::class)->name('expenditure');
 });
 
 // COMMON

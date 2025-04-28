@@ -10,8 +10,21 @@ class OrdersModel extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = "orders";
-    protected $fillable = ['user_id', 'customer_id', 'order_number', 'order_amount', 'status'];
+    protected $fillable = [
+        'user_id',
+        'customer_id',
+        'order_number',
+        'order_amount',
+        'discount',
+        'amount_payable',
+        'amount_paid',
+        'balance',
+        'payment_method',
+        'status',
+        'due_date'
+    ];
 
+    protected $dates = ['due_date'];
 
     public function user()
     {
@@ -30,7 +43,7 @@ class OrdersModel extends Model
 
     public function transactions()
     {
-        return $this->hasOne(TransactionsModel::class, 'order_id');
+        return $this->hasMany(TransactionsModel::class, 'order_id');
     }
     public function invoice()
     {

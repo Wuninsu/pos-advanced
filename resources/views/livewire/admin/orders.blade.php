@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class=" col-lg-3 col-md-6">
                             <input type="search" wire:model.live="search" class="form-control"
-                                placeholder="Search invoice number...">
+                                placeholder="Search order number...">
 
                         </div>
                         <div class="col-lg-4 col-md-6 d-flex align-items-center mt-3 mt-md-0">
@@ -28,7 +28,7 @@
 
 
                         <div class="col-lg-5 text-lg-end mt-3 mt-lg-0">
-                            <a href="{{ route('pos') }}" class="btn btn-primary me-2">+ POS</a>
+                            <a href="{{ route('orders.create') }}" class="btn btn-primary me-2">+ Create New Order</a>
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="chartDropdown"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Export as
@@ -48,10 +48,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th class="pe-0">Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Order Amount({!! $settings['currency'] ?? 'Ghs' !!})</th>
+                                    <th>Amt. Due({!! $settings['currency'] ?? 'Ghs' !!})</th>
+                                    <th>Amt. Paid({!! $settings['currency'] ?? 'Ghs' !!})</th>
                                     <th>Status</th>
-                                    <th>Processed By</th>
+                                    <th>By</th>
                                     <th>Date</th>
                                     <th>Action</th>
                                 </tr>
@@ -61,8 +61,27 @@
                                     <tr>
                                         <td class="pe-0">{{ $orders->firstItem() + $loop->index }}</td>
                                         <td>#{{ $order->order_number }}</td>
-                                        <td>{{ $order->customer->name ?? 'N/A' }}</td>
-                                        <td>{{ $order->order_amount }}</td>
+                                        <td>{{ number_format($order->amount_payable, 2) }}
+                                        </td>
+                                        <td>{{ number_format($order->amount_paid, 2) }}
+                                            @php
+                                                $due = $order->amount_payable;
+                                                $balance = $order->amount_paid - $due;
+                                            @endphp
+                                            @if ($balance < 0)
+                                                <span class="badge bg-warning text-dark ms-1">
+                                                    Owing {{ number_format(abs($balance), 2) }}
+                                                </span>
+                                            @elseif ($balance > 0)
+                                                <span class="badge bg-info text-white ms-1">
+                                                    Credit {{ number_format($balance, 2) }}
+                                                </span>
+                                            @else
+                                                <span class="badge bg-success text-white ms-1">
+                                                    Paid in Full
+                                                </span>
+                                            @endif
+                                        </td>
                                         <td>
                                             @if ($order->status === 'completed')
                                                 <span class="badge badge-success-soft text-success">Completed</span>

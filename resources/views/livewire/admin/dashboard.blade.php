@@ -192,7 +192,7 @@
                     <div class="card h-100 card-lift">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-semi-bold ">Today Orders</span>
+                                <span class="fw-semi-bold ">Today Sales Count</span>
                                 <i data-feather="table"></i>
                             </div>
                             <div class="mt-4 mb-2 ">
@@ -206,7 +206,7 @@
                     <div class="card h-100 card-lift">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-semi-bold ">Today Sales</span>
+                                <span class="fw-semi-bold ">Today Sales Amount</span>
                                 <i data-feather="credit-card"></i>
                             </div>
                             <div class="mt-4 mb-2 ">
@@ -219,7 +219,7 @@
                     <div class="card h-100 card-lift">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-semi-bold ">Total Orders</span>
+                                <span class="fw-semi-bold ">Total Sales Count</span>
                                 <i data-feather="shopping-cart"></i>
                             </div>
                             <div class="mt-4 mb-2 ">
@@ -233,7 +233,7 @@
                     <div class="card h-100 card-lift">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-semi-bold ">Total Sales</span>
+                                <span class="fw-semi-bold ">Total Sales Amount</span>
                                 <i data-feather="credit-card"></i>
                             </div>
                             <div class="mt-4 mb-2 ">
@@ -407,7 +407,7 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <div class="card-header">
-                        <h4 class="mb-0">Orders</h4>
+                        <h4 class="mb-0">Sales</h4>
                     </div>
                     <!-- card header -->
                     <div class="card-body p-0">
@@ -416,31 +416,31 @@
                         <table class="table mb-0">
                             <tbody>
                                 <tr>
-                                    <td class="border-top-0 ">Today's Orders Amount</td>
+                                    <td class="border-top-0 ">Today's Sales Amount</td>
                                     <td>{{ ordersCountToday() }}</td>
                                     <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersToday() }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="border-top-0 ">This Week's Orders Amount</td>
+                                    <td class="border-top-0 ">This Week's Sales Amount</td>
                                     <td>{{ ordersCountThisWeek() }}</td>
                                     <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisWeek() }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="border-top-0 ">This Month's Orders Amount</td>
+                                    <td class="border-top-0 ">This Month's Sales Amount</td>
                                     <td>{{ ordersCountThisMonth() }}</td>
                                     <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisMonth() }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="border-top-0 ">This Year's Orders Amount</td>
+                                    <td class="border-top-0 ">This Year's Sales Amount</td>
                                     <td>{{ ordersCountThisYear() }}</td>
                                     <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ ordersThisYear() }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="border-top-0 ">All Time Orders Amount</td>
+                                    <td class="border-top-0 ">All Time Sales Amount</td>
                                     <td>{{ allTimeCount() }}</td>
                                     <td class="text-end border-top-0  ">{!! $settings['currency'] ?? 'Ghs' !!}{{ allTimePayments() }}
                                     </td>
@@ -457,7 +457,7 @@
                         <div class="d-flex justify-content-between
                     align-items-center">
                             <div>
-                                <h4 class="mb-0">Orders Charts</h4>
+                                <h4 class="mb-0">Sales Charts</h4>
                             </div>
                             <div>
 

@@ -11,35 +11,32 @@ class Invoices extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'invoices';
+
     protected $fillable = [
-        'uuid',
         'invoice_number',
-        'order_id',
-        'invoice_date',
-        'total_amount',
-        'tax_amount',
+        'user_id',
+        'customer_id',
+        'invoice_amount',
         'discount',
-        'status', //'unpaid', 'paid', 'canceled'
+        'amount_payable',
+        'amount_paid',
+        'balance',
+        'payment_method',
+        'status',
+        'invoice_date',
     ];
 
-    public function getRouteKeyName()
+    public function user()
     {
-        return 'uuid';
+        return $this->belongsTo(User::class);
     }
-    protected $guarded = ['uuid'];
-
-    public static function boot()
+    public function customer()
     {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->uuid)) {
-                $model->uuid = (string) Str::uuid();
-            }
-        });
+        return $this->belongsTo(CustomersModel::class, 'customer_id');
     }
-    public function order()
+
+    public function invoiceDetail()
     {
-        return $this->belongsTo(OrdersModel::class, 'order_id');
+        return $this->hasMany(InvoiceDetail::class, 'invoice_id');
     }
 }

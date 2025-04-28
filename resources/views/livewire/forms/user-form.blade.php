@@ -107,7 +107,7 @@
                                         <option value="admin">Admin</option>
                                     @endif
                                     {{-- <option value="manager">Manager</option> --}}
-                                    <option value="cashier">Cashier</option>
+                                    <option value="salesrep">Sales Rep</option>
                                 </select>
                                 @error('role')
                                     <span class="invalid-feedback" role="alert">

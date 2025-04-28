@@ -49,7 +49,7 @@ class Orders extends Component
 
     public function confirmDelete($orderNum)
     {
-        if (!can_cashier_delete_data()) {
+        if (!preference('allow_rep_delete_orders')) {
             return;
         }
         $order = OrdersModel::where('order_number', $orderNum)

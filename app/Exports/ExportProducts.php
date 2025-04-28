@@ -15,7 +15,7 @@ class ExportProducts implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return ProductsModel::all();
+        return ProductsModel::latest()->get();
     }
 
     public function map($product): array

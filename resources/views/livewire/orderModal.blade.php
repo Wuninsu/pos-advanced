@@ -43,9 +43,42 @@
                                 <input type="radio" wire:model.live="paymentMethod" value="cash"
                                     id="payment_method_cash" class="radio-input">
                                 <label for="payment_method_cash" class="radio-label">
-                                    &#128181; Cash
+                                    💵 Cash
                                 </label>
                             </div>
+
+                            <div class="radio-item">
+                                <input type="radio" wire:model.live="paymentMethod" value="bank"
+                                    id="payment_method_bank" class="radio-input">
+                                <label for="payment_method_bank" class="radio-label">
+                                    🏦 Bank
+                                </label>
+                            </div>
+
+                            <div class="radio-item">
+                                <input type="radio" wire:model.live="paymentMethod" value="cheque"
+                                    id="payment_method_cheque" class="radio-input">
+                                <label for="payment_method_cheque" class="radio-label">
+                                    🧾 Cheque
+                                </label>
+                            </div>
+
+                            <div class="radio-item">
+                                <input type="radio" wire:model.live="paymentMethod" value="credit"
+                                    id="payment_method_credit" class="radio-input">
+                                <label for="payment_method_credit" class="radio-label">
+                                    💳 Credit
+                                </label>
+                            </div>
+
+                            <div class="radio-item">
+                                <input type="radio" wire:model.live="paymentMethod" value="mobile_money"
+                                    id="payment_method_mobile" class="radio-input">
+                                <label for="payment_method_mobile" class="radio-label">
+                                    📱 Momo
+                                </label>
+                            </div>
+
                             {{-- <div class="radio-item">
                                 <input type="radio" wire:model.live="paymentMethod" value="online"
                                     id="payment_method_mobile" class="radio-input">
@@ -76,8 +109,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="buttton" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="buttton_1" wire:click="submitOrder">Complete
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" wire:click="submitOrder">Complete
                         Order</button>
                 </div>
             </div>
@@ -137,7 +170,8 @@
                                             src="{{ asset('storage/' . ($settings['logo'] ?? NO_IMAGE)) }}"
                                             alt="logo">
                                     </td>
-                                    <td width="60%" style="text-transform:uppercase" align="left" valign="top">
+                                    <td width="60%" style="text-transform:uppercase" align="left"
+                                        valign="top">
                                         <h2 style="margin-bottom: 0px">
                                             <code>
                                                 {{ !empty($settings['website_name']) ? $settings['website_name'] : 'business name goes here' }}

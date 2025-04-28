@@ -14,7 +14,7 @@ class ExportUsers implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return User::all();
+        return User::latest()->get();
     }
 
     public function map($user): array

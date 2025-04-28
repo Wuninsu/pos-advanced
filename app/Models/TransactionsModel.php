@@ -10,14 +10,13 @@ class TransactionsModel extends Model
     use HasFactory;
     protected $table = "transactions";
     protected $fillable = [
-        'amount_paid',
         'user_id',
         'order_id',
         'balance',
-        'payment_method', // cash, online
-        'transact_amount',
+        'payment_method',
+        'transaction_amount',
         'transaction_number',
-        'transact_date'
+        'transaction_date'
     ];
 
 

@@ -19,7 +19,14 @@ class PreferencesSeeder extends Seeder
             // ['key' => 'allow_discounts', 'value' => true],
             // ['key' => 'show_profit_on_sales', 'value' => false],
             // ['key' => 'enable_dark_mode', 'value' => false],
-            ['key' => 'allow_cashier_delete_data', 'value' => false],
+            ['key' => 'allow_rep_delete_data', 'value' => false],
+            ['key' => 'allow_rep_delete_categories', 'value' => false],
+            ['key' => 'allow_rep_delete_customers', 'value' => false],
+            ['key' => 'allow_rep_delete_products', 'value' => false],
+            ['key' => 'allow_rep_delete_orders', 'value' => false],
+            ['key' => 'allow_rep_delete_invoices', 'value' => false],
+            ['key' => 'allow_rep_delete_units', 'value' => false],
+            ['key' => 'allow_rep_delete_services', 'value' => false],
             ['key' => 'enable_cart_sound', 'value' => true],
         ];
 

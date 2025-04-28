@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->enum('role', ['admin', 'manager', 'cashier'])->default('cashier');
+            $table->enum('role', ['admin', 'salesrep'])->default('salesrep');
             $table->boolean('status')->default(0)->comment('1:active,0:blocked');
             $table->string('password');
             $table->string('avatar')->nullable();

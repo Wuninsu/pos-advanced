@@ -20,7 +20,7 @@ class Customers extends Component
 
     public function confirmDelete($id)
     {
-        if (!can_cashier_delete_data()) {
+        if (!preference('allow_rep_delete_customers')) {
             return;
         }
         $this->customerId = $id;

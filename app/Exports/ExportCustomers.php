@@ -14,7 +14,7 @@ class ExportCustomers implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return CustomersModel::all();
+        return CustomersModel::latest()->get();
     }
 
     public function map($customer): array

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onDelete('set null');
+            $table->foreignId('unit_id')->nullable()->constrained('units')->onDelete('set null');
             $table->string('name');
             $table->string('sku')->unique()->nullable();
             $table->string('barcode')->nullable();

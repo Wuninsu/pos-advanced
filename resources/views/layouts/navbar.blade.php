@@ -15,7 +15,7 @@
              </a>
 
              <div class="d-none d-md-none d-lg-block col-md-6">
-                 <livewire:forms.search-form />
+                 {{-- <livewire:forms.search-form /> --}}
              </div>
 
 

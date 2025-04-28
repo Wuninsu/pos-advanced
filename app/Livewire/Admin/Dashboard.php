@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Events\NotificationAlert;
 use App\Models\CategoriesModel;
 use App\Models\CustomersModel;
+use App\Models\Invoices;
 use App\Models\OrdersModel;
 use App\Models\ProductsModel;
 use App\Models\SettingsModel;

@@ -48,7 +48,7 @@ class Invoices extends Component
     }
     public function confirmDelete($invoiceNum)
     {
-        if (!can_cashier_delete_data()) {
+        if (!preference('allow_rep_delete_invoices')) {
             return;
         }
         $invoice = ModelsInvoices::where('invoice_number', $invoiceNum)->firstOrFail();
@@ -59,7 +59,7 @@ class Invoices extends Component
 
     public function exportAs($type)
     {
-        return Excel::download(new ExportInvoice, now().'_invoices.' . $type);
+        return Excel::download(new ExportInvoice, now() . '_invoices.' . $type);
     }
 
 

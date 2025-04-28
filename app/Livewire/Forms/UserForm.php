@@ -26,7 +26,7 @@ class UserForm extends Component
             'username' => 'required|min:4|max:255|alpha_dash|unique:users,username,' . $this->user_id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $this->user_id,
             'phone' => 'required|regex:/^\d{10,13}$/|unique:users,phone,' . $this->user_id,
-            'role' => 'required|string|in:admin,manager,cashier',
+            'role' => 'required|string|in:admin,salesrep',
             'status' => 'nullable|boolean',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'password' => $this->user_id ? 'nullable|confirmed|min:6' : 'required|confirmed|min:6',

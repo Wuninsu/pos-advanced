@@ -18,7 +18,7 @@ class InvoiceGenerator extends Controller
 
     public function downloadPdf($invoice)
     {
-        $invoice = Invoices::with(['order.orderDetails.product', 'order'])
+        $invoice = Invoices::with(['invoiceDetail.product'])
             ->where('invoice_number', $invoice)
             ->firstOrFail();
 

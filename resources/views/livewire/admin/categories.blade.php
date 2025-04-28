@@ -119,12 +119,13 @@
 
     <div id="deleteModal" class="backdrop @if ($showDelete) active @endif">
         <div class="confirmDelete">
-            <button class="close-btn" onclick="closeModal()">×</button>
+            <button class="close-btn" wire:click="$set(showDelete,false)" onclick="closeModal()">×</button>
             <div class="confirmDelete-title">Delete Confirmation</div>
             <div class="confirmDelete-content" id="deleteMessage">Are you sure you want to delete this category?</div>
             <div class="confirmDelete-buttons">
-                <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-danger btn-sm" wire:click="handleDelete()">Delete</button>
+                <button type="button" class="btn btn-secondary btn-sm" wire:click="$set(showDelete,false)"
+                    onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn btn-danger btn-sm" wire:click="handleDelete()">Delete</button>
             </div>
         </div>
     </div>

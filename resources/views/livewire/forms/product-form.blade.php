@@ -9,7 +9,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex justify-content-between">
-                                    <label class="form-label">Category</label>
+                                    <label class="form-label mb-0">Category</label>
                                     <a href="{{ route('categories') }}" class="btn-link fw-semi-bold">Add New
                                         Category</a>
                                 </div>
@@ -32,7 +32,7 @@
 
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex justify-content-between">
-                                    <label class="form-label">Suppliers</label>
+                                    <label class="form-label mb-0">Suppliers</label>
                                     <a href="{{ route('suppliers.create') }}" class="btn-link fw-semi-bold">Add New
                                         Supplier</a>
                                 </div>
@@ -56,7 +56,7 @@
                         <div>
                             <!-- input -->
                             <div class="mb-3">
-                                <label class="form-label">Product Name</label>
+                                <label class="form-label mb-0">Product Name</label>
                                 <input type="text" wire:model.live="name"
                                     class="form-control @error('name') border-danger is-invalid @enderror"
                                     placeholder="Enter product name">
@@ -68,7 +68,7 @@
                             </div>
                             <!-- input -->
                             <div class="mb-3">
-                                <label class="form-label">Product Description</label>
+                                <label class="form-label mb-0">Product Description</label>
                                 <textarea wire:model.live="description" class="form-control @error('description') border-danger is-invalid @enderror"
                                     id="prod-description" rows="3"></textarea>
                                 @error('description')
@@ -108,9 +108,29 @@
                                 wire:model.live="status" type="checkbox" role="switch" id="flexSwitchStock">
                             <label class="form-check-label" for="flexSwitchStock">Status</label>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label mb-0">Unit of Measurement</label>
+                            <select wire:model.defer="unit" id="unitDropdown"
+                                class="form-select @error('unit') border-danger is-invalid @enderror">
+                                <option value="">Select Unit</option>
+                                <div wire:ignore>
+                                    @isset($units)
+                                        @foreach ($units as $unit)
+                                            <option value="{{ $unit->id }}">
+                                                {{ $unit->name }} - ({{ $unit->abbreviation }})</option>
+                                        @endforeach
+                                    @endisset
+                            </select>
+                            @error('unit')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
                         <div class="">
                             <div class="mb-3">
-                                <label class="form-label">Stock Quantity</label>
+                                <label class="form-label mb-0">Stock Quantity</label>
                                 <input type="text" wire:model.live="stock"
                                     class="form-control  @error('stock') border-danger is-invalid @enderror"
                                     placeholder="">
@@ -122,7 +142,7 @@
                             </div>
                             <!-- input -->
                             <div class="mb-3">
-                                <label class="form-label">Unit Price</label>
+                                <label class="form-label mb-0">Unit Price</label>
                                 <input type="text" wire:model.live="price"
                                     class="form-control  @error('price') border-danger is-invalid @enderror"
                                     placeholder="">
@@ -136,7 +156,7 @@
 
                         <div>
                             <div class="mb-3">
-                                <label class="form-label">Product Barcode</label>
+                                <label class="form-label mb-0">Product Barcode</label>
                                 <input type="text" wire:model.live="barcode"
                                     class="form-control  @error('barcode') border-danger is-invalid @enderror"
                                     placeholder="">
@@ -147,7 +167,7 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Product SKU</label>
+                                <label class="form-label mb-0">Product SKU</label>
                                 <input type="text" wire:model="sku"
                                     class="form-control  @error('sku') border-danger is-invalid @enderror"
                                     placeholder="Enter stock keeping unit">

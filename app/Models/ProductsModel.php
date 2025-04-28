@@ -24,7 +24,8 @@ class ProductsModel extends Model
         'status',
         'supplier_id',
         'img',
-        'uuid'
+        'uuid',
+        'unit_id',
     ];
 
     public function getRouteKeyName()
@@ -46,6 +47,11 @@ class ProductsModel extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
     }
 
     public function category()

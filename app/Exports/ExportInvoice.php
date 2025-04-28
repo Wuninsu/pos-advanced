@@ -14,7 +14,7 @@ class ExportInvoice implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return Invoices::all();
+        return Invoices::latest()->get();
     }
 
     public function map($invoice): array

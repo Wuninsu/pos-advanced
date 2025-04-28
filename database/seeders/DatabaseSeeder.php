@@ -16,11 +16,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             SettingsSeeder::class,
-            CategorySeeder::class,
+            // CategorySeeder::class,
             PreferencesSeeder::class,
             // CustomerSeeder::class,
             // SupplierSeeder::class,
+            UnitSeeder::class,
             // ProductSeeder::class,
+            // ServicesSeeder::class,
+            SmsTemplatesSeeder::class
         ]);
     }
 }

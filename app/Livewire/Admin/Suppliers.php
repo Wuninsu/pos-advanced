@@ -30,7 +30,7 @@ class Suppliers extends Component
 
     public function confirmDelete($id)
     {
-        if (!can_cashier_delete_data()) {
+        if (!preference('allow_rep_delete_suppliers')) {
             return;
         }
         $this->supplierId = $id;
@@ -39,7 +39,7 @@ class Suppliers extends Component
 
     public function handleDelete()
     {
-        if (!can_cashier_delete_data()) {
+        if (!preference('allow_rep_delete_suppliers')) {
             return;
         }
         if ($this->supplierId) {

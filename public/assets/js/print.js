@@ -46,6 +46,31 @@ function printReceipt(elem) {
                 margin: 0px;
             }
 
+             .info-table {
+            font-size: 13px;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .info-table td {
+            padding: 2px 6px;
+            line-height: 1.4;
+            border-bottom: 1px solid #ddd;
+        }
+
+
+        .info-table td:nth-child(odd) {
+            font-weight: bold;
+        }
+
+        .info-table td:last-child {
+            text-align: right;
+        }
+
+        .info-table tr:last-child td {
+            border-bottom: none;
+        }
 
             /* Container styling */
             .assessment-guide {
@@ -87,6 +112,9 @@ function printReceipt(elem) {
                 font-style: italic;
             }
 
+             .small {
+                            font-size: small !important;
+                        }
 
             @media print {
                 @page {
@@ -783,6 +811,70 @@ video {
 .text-white {
     color: #fff;
 }
+      /* Reset some styles */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Arial', sans-serif;
+                padding: 20px;
+                font-size: 14px;
+                color: #000;
+                background: #fff;
+            }
+
+            h1, h2, h3, h4 {
+                margin-bottom: 10px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 13px;
+            }
+
+            table, th, td {
+                border: 1px solid #000;
+            }
+
+            th, td {
+                padding: 3px;
+                text-align: center;
+            }
+
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+
+            .bg-success {
+                background-color: #28a745;
+                color: #fff;
+            }
+
+            .bg-danger {
+                background-color: #dc3545;
+                color: #fff;
+            }
+
+            .bg-primary {
+                background-color: #007bff;
+                color: #fff;
+            }
+
+            .bg-warning {
+                background-color: #ffc107;
+                color: #212529;
+            }
+
+            /* Optional: Add page breaks after each section */
+            .page-break {
+                page-break-after: always;
+            }
 
 @page {
     margin: 0;

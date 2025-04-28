@@ -268,10 +268,10 @@
             });
 
 
-            // window.addEventListener('playAddToCartSound', event => {
-            //     const audio = document.getElementById('addToCartSound');
-            //     audio.play();
-            // });
+            window.addEventListener('playAddToCartSound', event => {
+                const audio = document.getElementById('addToCartSound');
+                audio.play();
+            });
 
 
             window.addEventListener('cartUpdated', event => {

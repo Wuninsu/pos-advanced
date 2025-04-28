@@ -35,6 +35,7 @@ class Categories extends Component
     public function saveCategory()
     {
         $validatedData = $this->validate(); // validate user inputs 
+        $validatedData['status'] = true;
         $save = CategoriesModel::create($validatedData); // save data
         if (!$save) {
             toastr()->error('Fail to create category. Please try again.'); // send error msg
@@ -85,7 +86,7 @@ class Categories extends Component
 
     public function confirmDelete($id)
     {
-        if (!can_cashier_delete_data()) {
+        if (!preference('allow_rep_delete_categories')) {
             return;
         }
         $category = CategoriesModel::findOrFail($id);
@@ -93,8 +94,7 @@ class Categories extends Component
         $this->showDelete = true;
         // $this->dispatch('confirmed', id: $id);
     }
-
-
+    
     public function handleDelete()
     {
         if ($this->category_id) {

@@ -14,7 +14,7 @@ class ExportOrders implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return OrdersModel::all();
+        return OrdersModel::latest()->get();
     }
 
     public function map($order): array

@@ -16,11 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('set null');
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->string('transaction_number')->unique();
-            $table->decimal('amount_paid', 10, 2)->default(0.00); // Renamed from mount_paid
+            $table->decimal('transaction_amount', 10, 2)->default(0.00);
             $table->decimal('balance', 10, 2)->default(0.00);
-            $table->string('payment_method')->default('cash')->comment(':cash,:online');
-            $table->decimal('transact_amount', 10, 2)->default(0.00);
-            $table->timestamp('transact_date')->nullable();
+            $table->enum('payment_method', ['cash', 'bank', 'cheque', 'credit', 'mobile_money'])->nullable();
+            $table->timestamp('transaction_date')->nullable();
             $table->timestamps();
         });
     }

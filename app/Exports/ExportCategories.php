@@ -16,7 +16,7 @@ class ExportCategories implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return CategoriesModel::all();
+        return CategoriesModel::latest()->get();
     }
 
     public function map($category): array

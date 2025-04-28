@@ -43,7 +43,7 @@ class Products extends Component
     #[On('delete-order')]
     public function handleDelete()
     {
-        if (!can_cashier_delete_data()) {
+        if (!preference('allow_rep_delete_products')) {
             return;
         }
         $user = auth('web')->user();
@@ -68,12 +68,12 @@ class Products extends Component
         // }
         $product->delete();
         $this->showDelete = false;
-        toastr('ProductDeleted Successfully', 'success');
+        toastr('Product Deleted Successfully', 'success');
     }
 
     public function confirmDelete($uuid)
     {
-        if (!can_cashier_delete_data()) {
+        if (!preference('allow_rep_delete_products')) {
             return;
         }
         $product = ProductsModel::where('uuid', $uuid)->firstOrFail();
