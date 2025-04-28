@@ -37,7 +37,7 @@ class ServiceRequestForm extends Component
             'unit_price' => 'required|numeric|min:0',
             'unit_of_measurement' => 'required|exists:units,id',
             'amount' => 'required|numeric|min:0',
-            'revenue' => 'required|numeric|min:0',
+            'revenue' => 'nullable|numeric|min:0',
             'fuel' => 'nullable|numeric|min:0',
             'allowance' => 'nullable|numeric|min:0',
             'feeding' => 'nullable|numeric|min:0',

@@ -68,9 +68,7 @@ class Invoices extends Component
     {
         $invoices = ModelsInvoices::query()
             ->when(!in_array(auth('web')->user()->role, ['admin', 'manager']), function ($query) {
-                $query->whereHas('order', function ($query) {
-                    $query->where('user_id', auth('web')->id());
-                });
+                $query->where('user_id', auth('web')->id());
             })
             ->when($this->search, function ($query) {
                 $query->where('invoice_number', 'like', $this->search . '%');

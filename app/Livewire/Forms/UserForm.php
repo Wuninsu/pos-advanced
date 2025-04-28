@@ -16,7 +16,8 @@ class UserForm extends Component
     use WithFileUploads;
     public $user_id;
 
-    public $username, $email, $name, $phone, $avatar, $status, $role, $password;
+    public $username, $email, $name, $phone, $avatar, $role, $password;
+    public $status = true;
     public $password_confirmation;
 
     protected function rules()

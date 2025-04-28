@@ -27,14 +27,14 @@ class Users extends Component
 
     public function confirmDelete($uuid)
     {
-        event(new StockAlertEvent([
-            'title' => 'Stock Alert:  Product A',
-            'message' => 'Only 3 items left in stock!',
-            'type' => 'stock'
-        ]));
+        // event(new StockAlertEvent([
+        //     'title' => 'Stock Alert:  Product A',
+        //     'message' => 'Only 3 items left in stock!',
+        //     'type' => 'stock'
+        // ]));
 
-        // $this->user_uuid = $uuid;
-        // $this->showDelete = true;
+        $this->user_uuid = $uuid;
+        $this->showDelete = true;
     }
 
     public function handleDelete()
@@ -73,7 +73,7 @@ class Users extends Component
         //     ForgotPassword::truncate();
         // }
 
-       
+
 
         // Cache::put("user_phone", auth('web')->user()->phone, now()->addMinutes(2));
 

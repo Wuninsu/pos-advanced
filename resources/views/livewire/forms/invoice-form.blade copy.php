@@ -1,6 +1,6 @@
 <div>
     @php
-        $settings = App\Models\SettingsModel::getSettingsData(); // Get all settings once
+    $settings = App\Models\SettingsModel::getSettingsData(); // Get all settings once
     @endphp
     <div class="row">
         <div class="offset-xxl-2 col-xxl-8 col-md-12 col-12">
@@ -35,29 +35,29 @@
                                     placeholder="Enter product name or sku...">
 
                                 @if (!empty($products))
-                                    <div :class="dropUp ? 'dropdown-menu show dropdown-top w-100 p-0' :
+                                <div :class="dropUp ? 'dropdown-menu show dropdown-top w-100 p-0' :
                                         'dropdown-menu show w-100 p-0 mt-1'"
-                                        id="searchResults" style="max-height: 200px; overflow-y: auto;">
-                                        <div class="list-group">
-                                            @forelse ($products as $item)
-                                                <a href="#"
-                                                    wire:click.prevent="setSelectedProduct({{ $item->id }})"
-                                                    class="list-group-item list-group-item-action">
-                                                    <strong>{{ $item->name }}</strong><br>
-                                                    <small>Stock: {{ $item->stock }}</small>
-                                                </a>
-                                            @empty
-                                                <div class="list-group-item">No results found</div>
-                                            @endforelse
-                                        </div>
+                                    id="searchResults" style="max-height: 200px; overflow-y: auto;">
+                                    <div class="list-group">
+                                        @forelse ($products as $item)
+                                        <a href="#"
+                                            wire:click.prevent="setSelectedProduct({{ $item->id }})"
+                                            class="list-group-item list-group-item-action">
+                                            <strong>{{ $item->name }}</strong><br>
+                                            <small>Stock: {{ $item->stock }}</small>
+                                        </a>
+                                        @empty
+                                        <div class="list-group-item">No results found</div>
+                                        @endforelse
                                     </div>
+                                </div>
                                 @endif
                             </div>
 
                             @error('product')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                             @enderror
 
                         </div>
@@ -67,12 +67,12 @@
                                 class="form-control @error('quantity') border-danger is-invalid @enderror"
                                 placeholder="">
                             @error('quantity')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                             @enderror
                         </div>
-                        {{-- 
+                        {{--
                         <div class="col-lg-5  mt-3 mt-lg-0">
                             <button type="button" wire:click="addToCart" class="btn btn-primary me-2">Add Item</button>
                         </div> --}}
@@ -94,49 +94,49 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($cartItems as $index => $item)
-                                            <tr>
-                                                <td>
-                                                    {{ \Illuminate\Support\Str::limit($item->product->name, 100) }}
-                                                    <textarea rows="2" wire:model="description.{{ $item->product->id }}"
-                                                        class="form-control @error('description.{{ $item->product->id }}') border-danger is-invalid @enderror"
-                                                        placeholder="Product Description"></textarea>
-                                                    @error("description.{$item->product->id}")
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
+                                        <tr>
+                                            <td>
+                                                {{ \Illuminate\Support\Str::limit($item->product->name, 100) }}
+                                                <textarea rows="2" wire:model="description.{{ $item->product->id }}"
+                                                    class="form-control @error('description.{{ $item->product->id }}') border-danger is-invalid @enderror"
+                                                    placeholder="Product Description"></textarea>
+                                                @error("description.{$item->product->id}")
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
 
-                                                </td>
-                                                <td>{{ number_format($item->product->price, 2) }}</td>
-                                                <td>
-                                                    <span>{{ $item->quantity }}</span>
-                                                </td>
-                                                <td>{{ number_format($item->product->price * $item->quantity, 2) }}
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex gap-1">
-                                                        <button class="btn btn-success btn-sm"
-                                                            wire:click="increaseQty({{ $item->id }})">
-                                                            <i style="font-size: 16px;font-weight: bold">&#x2b;</i>
-                                                        </button>
-                                                        <button class="btn btn-warning btn-sm"
-                                                            wire:click="decreaseQty({{ $item->id }})">
-                                                            <i style="font-size: 16px;font-weight: bold">&#x2212;</i>
-                                                        </button>
-                                                        <button class="btn btn-danger btn-sm"
-                                                            wire:click="deleteItem({{ $item->id }})">
-                                                            <i style="font-size: 16px;font-weight: bold">&#x78;</i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            </td>
+                                            <td>{{ number_format($item->product->price, 2) }}</td>
+                                            <td>
+                                                <span>{{ $item->quantity }}</span>
+                                            </td>
+                                            <td>{{ number_format((float)$item->product->price * (float) $item->quantity, 2) }}
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <button class="btn btn-success btn-sm"
+                                                        wire:click="increaseQty({{ $item->id }})">
+                                                        <i style="font-size: 16px;font-weight: bold">&#x2b;</i>
+                                                    </button>
+                                                    <button class="btn btn-warning btn-sm"
+                                                        wire:click="decreaseQty({{ $item->id }})">
+                                                        <i style="font-size: 16px;font-weight: bold">&#x2212;</i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm"
+                                                        wire:click="deleteItem({{ $item->id }})">
+                                                        <i style="font-size: 16px;font-weight: bold">&#x78;</i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
                                         @empty
-                                            <tr>
+                                        <tr>
 
-                                                <td colspan="5" class="text-center">
-                                                    <img width="150" height="auto"
-                                                        src="{{ asset('assets/img/empty2.png') }}" alt=""
-                                                        srcset="">
-                                                </td>
-                                            </tr>
+                                            <td colspan="5" class="text-center">
+                                                <img width="150" height="auto"
+                                                    src="{{ asset('assets/img/empty2.png') }}" alt=""
+                                                    srcset="">
+                                            </td>
+                                        </tr>
                                         @endforelse
                                         <tr>
                                             <td rowspan="6">
@@ -144,7 +144,7 @@
                                                     class="form-control @error('amount_in_words') border-danger is-invalid @enderror"
                                                     placeholder="Enter amount in words..."></textarea>
                                                 @error('amount_in_words')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </td>
                                         </tr>
@@ -201,12 +201,12 @@
                                 <div class="row">
                                     <div class="col-12">
                                         @error('customerPhone')
-                                            <span class="text-danger">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                         @error('paymentStatus')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
                                         @enderror
                                     </div>
                                     <div class="col-md-4">
@@ -224,9 +224,9 @@
                                         <div class="d-flex justify-content-between">
                                             <label class="form-label">Enter Customer/Client Phone Number</label>
                                             @if ($newCustomer)
-                                                <a href="#" class="btn-link fw-semi-bold"
-                                                    data-bs-toggle="modal" data-bs-target="#customerModal">Add
-                                                    New</a>
+                                            <a href="#" class="btn-link fw-semi-bold"
+                                                data-bs-toggle="modal" data-bs-target="#customerModal">Add
+                                                New</a>
                                             @endif
                                         </div>
                                         <input type="text" id="customerPhone" wire:model.live="customerPhone"
@@ -256,11 +256,11 @@
 
 
     @script
-        <script>
-            $wire.on('close-customer-model', (event) => {
-                closeModel('customerModal')
-            });
-        </script>
+    <script>
+        $wire.on('close-customer-model', (event) => {
+            closeModel('customerModal')
+        });
+    </script>
     @endscript
 
     <script>
