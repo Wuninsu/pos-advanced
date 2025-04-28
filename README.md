@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
@@ -126,6 +127,10 @@ Visual Representation of Relationships
 
     Supplier Relationships:
         Supplier -> User (Many-to-One)
+=======
+# pos-advanced
+Advanced copy of our echo pos system
+>>>>>>> 0410bfbb7ed11edf212c12550cec9c4767a49cba
 =======
 # pos-advanced
 Advanced copy of our echo pos system
